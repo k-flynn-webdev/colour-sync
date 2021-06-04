@@ -1,0 +1,62 @@
+@import "build/app_vars";
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap');
+
+html {
+    background: #202835;
+}
+
+.#{$base-class-name},
+.#{$base-class-name}.template {
+    font-family: 'Poppins', sans-serif;
+
+    .navigation-bar .level {
+        .email { font-size: 0.9rem; }
+
+        ul li {
+            padding: 0.15rem 0;
+            margin-top: 0.15rem;
+
+            &:first-of-type {
+                margin-top: 0;
+            }
+
+            .navbar-item {
+                margin: 0;
+                padding: 0 0.33rem;
+            }
+        }
+
+        .level-item {
+            .menu-label,
+            .menu-list a {
+                color: hsl(0, 0%, 96%);
+            }
+
+            &:hover,
+            .menu-list a:hover {
+                color: hsl(0, 0%, 25%);
+            }
+        }
+    }
+
+    .container {
+        &.is-desktop {
+            max-width: 30rem;
+
+            .errorlist {
+                list-style: disc;
+                margin-left: 1rem;
+            }
+        }
+    }
+
+    .page-footer .icon {
+        fill: hsl(0, 0%, 96%);
+
+        &.is-medium {
+            height: 1rem;
+        }
+    }
+}
+

@@ -1,0 +1,8 @@
+<div class="errorlist has-text-danger mb-3">
+  {% for key, value in form.errors.items %}
+    <strong class="has-text-danger">
+      {% if key != '__all__' %}{{ key }} {% endif %}
+    </strong>
+    {{ value }}
+  {% endfor %}
+</div>

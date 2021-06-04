@@ -1,0 +1,19 @@
+{
+  "name": "build-watch",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run watch",
+    "build": "./build.sh",
+    "watch": "nodemon -q -w ../app/src --ext '.' --exec './build.sh'"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "devDependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

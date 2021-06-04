@@ -1,0 +1,77 @@
+{
+  "name": "base",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build-dev": "NODE_ENV=development vue-cli-service build --mode development",
+    "build-base-css": "node-sass src/sass/base.scss -o public/static/css --output-style compressed",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "main": "sass/index.scss",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "core-js": "^2.6.5",
+    "lodash-es": "^4.17.20",
+    "qs": "^6.9.4",
+    "vue": "^2.6.6",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.4.9",
+    "vuex": "^3.6.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-eslint": "^3.5.0",
+    "@vue/cli-plugin-unit-mocha": "~4.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "@vue/test-utils": "^1.0.3",
+    "babel-eslint": "^10.0.1",
+    "dotenv": "^10.0.0",
+    "bulma": "^0.9.1",
+    "dotenv-expand": "^5.1.0",
+    "chai": "^4.1.2",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "lint-staged": "^8.1.4",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.0",
+    "sinon": "^11.1.1",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "jest": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}

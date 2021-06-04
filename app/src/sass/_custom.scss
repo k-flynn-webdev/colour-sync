@@ -1,0 +1,86 @@
+
+html {
+  background-color: $color-bg;
+}
+
+.#{$base-class-name} {
+  font-family: 'Poppins', sans-serif;
+  color: $color-text;
+  min-height: 40rem;
+
+  .email { font-size: 0.9rem; }
+
+  .close {
+    fill: $color-bg;
+  }
+
+  &.messages {
+    position: fixed;
+    top: 2rem;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    text-align: center;
+    pointer-events: none;
+
+    .message {
+      display: inline-block;
+      color: $color-tag-text;
+      background-color: $color-tag;
+      border-radius: 1rem;
+      padding: $unit * 2 $unit * 4;
+      text-align: center;
+      min-width: 10rem;
+      max-width: 95vmin;
+
+      @include mobile () {
+        min-width: 95vmin;
+      }
+
+      &.is-error {
+        color: $color-bg;
+        background-color: $warning;
+      }
+
+      &__row {
+        @extend .is-row;
+        @extend .is-row.center;
+        position: relative;
+
+        &-content {}
+        &-button {
+          @extend .is-clickable;
+          position: absolute;
+          right: $unit * -2.75;
+
+          height: 1.5rem;
+          max-width: 1.5rem;
+          margin-left: $unit;
+        }
+      }
+    }
+  }
+
+  label { color: $color-text; }
+  input {
+    &::placeholder { color: rgba($color-text, 0.33); }
+    color: $color-text;
+    background-color: $color-bg;
+  }
+
+  .input {
+    border: $color-input-border solid $control-border-width;
+
+    &:hover {
+      border: $color-text solid $control-border-width;
+    }
+  }
+
+  .columns {
+    .column {
+      &.is-grow {
+        flex-grow: 1;
+      }
+    }
+  }
+}

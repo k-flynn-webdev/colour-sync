@@ -1,0 +1,65 @@
+@charset "utf-8";
+
+// Import a Google Font
+//@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap');
+
+@import "build/app_vars";
+
+$unit: 0.25rem;
+$transition: 0.3s;
+
+$success: #839f30;
+$background: #202835;
+
+$color-bg: #202835;
+$color-track: #2f3c4d;
+$color-track-light: #3a495e;
+$color-tag: $success;
+$color-tag-dark: #959e78;
+
+$white: #dbe9e6;
+$color-text: $white;
+$color-track-text: $white;
+$color-tag-text: $white;
+$color-shadow: hsla(0%,0%,60%,0.1);
+$color-shadow-right: hsla(0%,0%,60%,0.1);
+$shadow-size: 2.3px;
+
+// Set your brand colors
+//$purple: #8A4D76;
+//$pink: #FA7C91;
+//$brown: #757763;
+//$beige-light: #D0D1CD;
+//$beige-lighter: #EFF0EB;
+
+// Update Bulma's global variables
+$family-sans-serif: "Nunito", sans-serif;
+//$grey-dark: $brown;
+//$grey-light: $beige-light;
+//$primary: $purple;
+//$link: $pink;
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+
+// Update some of Bulma's component variables
+//$body-background-color: $beige-lighter;
+$control-border-width: 1.4px;
+$color-input-border: rgba($color-text, 0.33);
+$input-shadow: none;
+
+
+// Import only what you need from Bulma
+@import "~bulma/sass/utilities/_all.sass";
+@import "~bulma/sass/base/_all.sass";
+@import "~bulma/sass/elements/button.sass";
+@import "~bulma/sass/elements/container.sass";
+@import "~bulma/sass/elements/title.sass";
+@import "~bulma/sass/form/_all.sass";
+@import "~bulma/sass/components/navbar.sass";
+@import "~bulma/sass/layout/hero.sass";
+@import "~bulma/sass/layout/section.sass";
+
+
+$array: (0, 1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9);
+

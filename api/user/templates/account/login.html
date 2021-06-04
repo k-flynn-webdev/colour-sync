@@ -1,0 +1,53 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Login" %}{% endblock %}
+{% block box_title %}{% trans "Login" %}{% endblock %}
+
+{% block content %}
+  <p>{% blocktrans %}If you have not created an account yet, then please
+  <a href="{{ signup_url }}">register</a> first.{% endblocktrans %}</p>
+
+  <form class="my-3" method="POST" action="{% url 'account_login' %}">
+    {% csrf_token %}
+
+    {% include "account/error_partial.html" %}
+
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control">
+        <input class="input" required type="email" name="login" placeholder="Email address">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Password</label>
+      <div class="control">
+        <input class="input" required type="password" name="password" placeholder="********">
+      </div>
+    </div>
+
+    {% if ACCOUNT_SESSION_REMEMBER == None %}
+        <div class="field mt-3 mb-5">
+          <label class="checkbox">
+            <input type="checkbox" name="remember" checked>
+            Remember me
+          </label>
+        </div>
+    {% endif %}
+
+    {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+    {% endif %}
+
+    <button class="button is-primary" type="submit">
+      {% trans "Login" %}
+    </button>
+
+  </form>
+
+  <a href="{% url 'account_reset_password' %}">
+    {% trans "Forgot Password?" %}
+  </a>
+{% endblock %}

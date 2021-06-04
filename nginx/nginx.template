@@ -1,0 +1,61 @@
+server {
+		gzip on;
+		gzip_disable "msie6";
+		gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+
+		listen 80;
+		listen [::]:80;
+
+		root /home/user01/${APP_NAME_FULL}/static/;
+		index index.html index.htm index.nginx-debian.html;
+
+		access_log /var/log/nginx/${APP_NAME_FULL}.log;
+		error_log /var/log/nginx/${APP_NAME_FULL}.error.log;
+
+		server_name ${URL_WEB} www.${URL_WEB};
+
+		location / {
+			try_files $uri /index.html;
+		}
+
+		location /static/ {
+			 root /home/user01/${APP_NAME_FULL};
+		}
+
+		location /api/ {
+			proxy_pass 		    ${API_ADDRESS};
+			proxy_http_version  1.1;
+			proxy_redirect      default;
+			proxy_set_header    Upgrade $http_upgrade;
+			proxy_set_header    Connection "upgrade";
+			proxy_set_header    Host $host;
+			proxy_set_header    X-Real-IP $remote_addr;
+			proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header    X-Forwarded-Host $server_name;
+		}
+
+		location /accounts/ {
+			proxy_pass 		    ${API_ADDRESS};
+			proxy_http_version  1.1;
+			proxy_redirect      default;
+			proxy_set_header    Upgrade $http_upgrade;
+			proxy_set_header    Connection "upgrade";
+			proxy_set_header    Host $host;
+			proxy_set_header    X-Real-IP $remote_addr;
+			proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header    X-Forwarded-Host $server_name;
+		}
+
+		location /accounts/admin/ {
+			proxy_pass 		    ${API_ADDRESS};
+			proxy_http_version  1.1;
+			proxy_redirect      default;
+			proxy_set_header    Upgrade $http_upgrade;
+			proxy_set_header    Connection "upgrade";
+			proxy_set_header    Host $host;
+			proxy_set_header    X-Real-IP $remote_addr;
+			proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header    X-Forwarded-Host $server_name;
+		}
+}
