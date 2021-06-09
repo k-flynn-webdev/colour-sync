@@ -15,4 +15,5 @@ class Project(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
+        db_table = 'projects'
         ordering = ['-updated_at']

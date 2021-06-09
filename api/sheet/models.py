@@ -23,4 +23,5 @@ class Sheet(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
+        db_table = 'sheets'
         ordering = ['-updated_at']

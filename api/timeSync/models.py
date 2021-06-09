@@ -14,3 +14,7 @@ class TimeSync(models.Model):
 
     updated_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'time_sync'
+        ordering = ['-updated_at']
