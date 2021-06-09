@@ -40,6 +40,7 @@ sheet (names eg base/ seasonal/ campaign x/ one off etc)
     *(All sheets override their project base sheet unless is base sheet)
     - id
     - owner
+    - project (see `project.sheet` above)
     - users (update)(many)
     - users (read)(many)
     - name
@@ -52,7 +53,7 @@ sheet (names eg base/ seasonal/ campaign x/ one off etc)
 data
     - data blob of what styles they want
     - type { scss : css : built }
-
+ 
 url 
     - api { css : scss }
     - non-api { css }
@@ -60,6 +61,7 @@ url
     - relative { css : scss } *(relative time (hours/days/weeks/months))
 
 time
+    - sheet (see `sheet.time` from above)
     - time (date + time)
     - time (duration (hours/days/weeks/months))
     - isRepeat (cron like? (Year, Month, DayOfMonth)) *(this needs more thought)

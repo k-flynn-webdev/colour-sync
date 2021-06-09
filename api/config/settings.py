@@ -95,6 +95,9 @@ INSTALLED_APPS = [
     # CUSTOM
     'csrf',
     'user',
+    'project',
+    'sheet',
+    'timeSync'
 ]
 
 
