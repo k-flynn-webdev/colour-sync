@@ -35,6 +35,7 @@ project
     - name
     - meta
     - sheet (many) *(a base sheet will always be created with the lowest ranking)
+    - url
 
 sheet (names eg base/ seasonal/ campaign x/ one off etc)
     *(All sheets override their project base sheet unless is base sheet)
@@ -54,15 +55,24 @@ data
     - data blob of what styles they want
     - type { scss : css : built }
  
-url 
-    - api { css : scss }
-    - non-api { css }
-    - absolute { css : scss } *(ignores time/ranking)
-    - relative { css : scss } *(relative time (hours/days/weeks/months))
+url
+    * have a `sheet.name` URL that supplies the minified direct to the base + only this `sheet`
+    * have a obfuscated URL that supplies only the minified direct to this sheet ?? undecided on this
+    * have a `project.name` URL that supplies the minified base + whatever is currently ranking `sheet`s
+        - tags can also be used for eg, time++ or time-- relative or absolute *(to help with testing)
 
 time
     - sheet (see `sheet.time` from above)
     - time (date + time)
     - time (duration (hours/days/weeks/months))
-    - isRepeat (cron like? (Year, Month, DayOfMonth)) *(this needs more thought)
+    - repeatType (enum)
+    - repeatVal (int) (in # days)
+    (repeatType should be based on the year kinda, eg:
+        * repeat `NONE` - default,
+        * repeat `DAY` of the month (x of 31),
+        * repeat `WEEK` of the year (x of 52),
+        * repeat `MONTH` of the year (x of 12),
+        * repeat `YEAR` on the year (+x of year)
+    With the user only being able to choose between each type not a combo!
+        * all repeat times will be started from the day eg after midnight 00:01 am) 
 
