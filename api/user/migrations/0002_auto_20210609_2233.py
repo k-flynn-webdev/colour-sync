@@ -13,18 +13,18 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='customuser',
-            name='created_at',
+            name='createdAt',
             field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='customuser',
-            name='deleted_at',
+            name='deletedAt',
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
             model_name='customuser',
-            name='updated_at',
+            name='updatedAt',
             field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
         ),

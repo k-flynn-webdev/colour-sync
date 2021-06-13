@@ -18,10 +18,10 @@ class Sheet(models.Model):
 
     meta = models.CharField(max_length=255, blank=False, default='')
 
-    updated_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    deleted_at = models.DateTimeField(blank=True, null=True)
+    updatedAt = models.DateTimeField(auto_now_add=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    deletedAt = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         db_table = 'sheets'
-        ordering = ['-updated_at']
+        ordering = ['-updatedAt']
