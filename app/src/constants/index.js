@@ -100,15 +100,41 @@ export const ADMIN = {
   route: { name: 'admin', href: '/accounts/admin/' },
 }
 
+
 /**
- * @typedef {object}    Track
+ * Check Project input is valid
+ *
+ * @param   {object}    input   Name string to check
+ * @returns {boolean}
+ */
+function checkProject (input) {
+  const isNameValid = (input && input.name && input.name.length >= 6)
+  return isNameValid
+}
+
+export const PROJECT = {
+  value: 'project',
+  store: 'project',
+  API: {
+    LIST: '/api/project/',
+    GET: '/api/project/',
+    POST: '/api/project/',
+    DELETE: '/api/project/',
+  },
+  route: { name: 'project', href: '/project' },
+  isValid: checkProject
+}
+
+/**
+ * @typedef {object}    Project
  *
  * @property {number}   id
- * @property {number}   user
- * @property {string}   track
- * @property {Tag[]}    tags
- * @property {date}     created_at
- * @property {date}     updated_at
+ * @property {string}   name
+ * @property {number}   owner
+ * @property {string}   meta
+ * @property {date}     createdAt
+ * @property {date}     updatedAt
+ * @property {date}     deletedAt
  */
 
 export const ALL = {
@@ -118,4 +144,5 @@ export const ALL = {
   LOGIN,
   LOGOUT,
   REGISTER,
+  PROJECT
 }

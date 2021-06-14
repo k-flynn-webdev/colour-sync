@@ -23,9 +23,9 @@ urlpatterns = [
     path('accounts/admin/', admin.site.urls),
     path('api/csrf/', include('csrf.urls')),
     path('api/whoami/', include('user.urls')),
-    path('project/', include('project.urls')),
-    path('sheet/', include('sheet.urls')),
-    path('timesync/', include('timeSync.urls')),
+    path('api/project/', include('project.urls')),
+    path('api/sheet/', include('sheet.urls')),
+    path('api/timesync/', include('timeSync.urls')),
 ]
               # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # if settings.DEBUG:

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import csrf from './csrf.js'
 import user from './user.js'
+import project from './project.js'
 
 Vue.use(Vuex)
 
@@ -15,5 +16,6 @@ export default new Vuex.Store({
   modules: {
     csrf,
     user,
+    project
   }
 })
