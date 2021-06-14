@@ -34,7 +34,7 @@
 
       <div class="field mt-5">
         <button class="button is-success">
-          {{ loading ? '...' : 'Login' }}
+          {{ loading ? '...' : 'Create' }}
         </button>
       </div>
 
@@ -65,12 +65,12 @@ export default {
   },
 
   methods: {
-    /** Reset Register details */
+    /** Reset form */
     resetForm () {
       this.form = this.$options.data.form.call(this)
     },
     /**
-     * Submit Login details to API for authentication
+     * Submit Project details to API
      *
      * @returns {void|Promise<boolean>}
      */
