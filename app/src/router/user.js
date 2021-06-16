@@ -1,4 +1,4 @@
-import store from 'src/store'
+import store from '@/store'
 const isAuthenticated = () => store.state.user.isLoggedIn
 
 export default [

@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import { PROJECT } from 'src/constants'
-import { genericErrMixin } from 'src/plugins/genericErrPlugin'
+import { PROJECT } from '@/constants'
+import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
 export default {
   name: 'project',

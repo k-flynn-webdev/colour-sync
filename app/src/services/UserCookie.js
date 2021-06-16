@@ -1,4 +1,4 @@
-import { USER } from 'src/constants'
+import { USER } from '@/constants'
 
 /**
  * Get local storage of a user model

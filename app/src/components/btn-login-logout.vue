@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import { LOGIN, LOGOUT, USER, CSRF } from 'src/constants'
-import crossIcon from 'src/assets/cross'
-import { genericErrMixin } from 'src/plugins/genericErrPlugin'
+import { LOGIN, LOGOUT, USER, CSRF } from '@/constants'
+import crossIcon from '@/assets/cross'
+import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
 
 export default {

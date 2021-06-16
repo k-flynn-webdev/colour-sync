@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import { PROJECT } from 'src/constants';
-import HTTP from 'src/services/HttpService'
+import { PROJECT } from '@/constants';
+import HTTP from '@/services/HttpService'
 
 
 /**
