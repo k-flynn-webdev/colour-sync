@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import btnLoginLogout from '@/components/btn-login-logout'
+import btnLoginLogout from 'src/components/btn-login-logout'
 
 export default {
   name: 'navigation',

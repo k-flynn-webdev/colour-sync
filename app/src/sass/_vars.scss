@@ -9,6 +9,7 @@
 $unit: 0.25rem;
 $transition: 0.3s;
 
+$hue: 75;
 $success: #839f30;
 $background: #202835;
 
@@ -18,8 +19,9 @@ $color-track-light: #3a495e;
 $color-tag: $success;
 $color-tag-dark: #959e78;
 
-$white: #dbe9e6;
+$white: #edf7f7;
 $color-text: $white;
+$color-text-alt: hsl(0,0,20%);
 $color-track-text: $white;
 $color-tag-text: $white;
 $color-shadow: hsla(0%,0%,60%,0.1);

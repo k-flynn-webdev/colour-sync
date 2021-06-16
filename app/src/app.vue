@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import navigation from '@/components/navigation'
-import pageFooter from '@/components/pageFooter'
+import navigation from 'src/components/navigation'
+import pageFooter from 'src/components/pageFooter'
 
 export default {
   name: 'app',

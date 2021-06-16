@@ -8,7 +8,7 @@
  * @property {number}   timeDelay     Time in seconds
  * @property {number}   timeDisplay   Time in seconds
  */
-import message from "@/components/message";
+import message from "src/components/message";
 
 const opts = {
   items: []

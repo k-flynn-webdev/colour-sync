@@ -61,11 +61,11 @@ html {
     }
   }
 
-  label { color: $color-text; }
+  label { color: $color-text-alt; }
   input {
-    &::placeholder { color: rgba($color-text, 0.33); }
-    color: $color-text;
-    background-color: $color-bg;
+    &::placeholder { color: rgba($color-text-alt, 0.33); }
+    color: $color-text-alt;
+    background-color: hsl($hue,5%,85%);
   }
 
   .input {

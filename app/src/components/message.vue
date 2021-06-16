@@ -34,7 +34,7 @@
  * @property {number}   timeDisplay   Time in seconds
  */
 
-import crossIcon from '@/assets/cross'
+import crossIcon from 'src/assets/cross'
 
 export default {
   name: 'message',

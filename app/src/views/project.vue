@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-5-tablet is-4-desktop is-3-widescreen project">
+  <div class="column is-7-tablet is-6-desktop is-4-widescreen project">
     <form class="box"
           @submit.prevent="submit">
       <div class="field">
@@ -10,7 +10,7 @@
           <input id="id-name"
                  v-model="form.name"
                  class="input"
-                 type="string"
+                 type="text"
                  minlength="6"
                  placeholder="e.g. new project 2021"
                  required
@@ -25,9 +25,9 @@
         <div class="control">
           <input id="id-meta"
                  v-model="form.meta"
-                 type="string"
-                 placeholder="eg your notes: release by xxx date?"
+                 type="text"
                  class="input"
+                 placeholder="eg your notes: release by xxx date?"
           >
         </div>
       </div>
@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import { PROJECT } from '@/constants'
-import { genericErrMixin } from '@/plugins/genericErrPlugin'
+import { PROJECT } from 'src/constants'
+import { genericErrMixin } from 'src/plugins/genericErrPlugin'
 
 export default {
   name: 'project',
@@ -67,7 +67,7 @@ export default {
   methods: {
     /** Reset form */
     resetForm () {
-      this.form = this.$options.data.form.call(this)
+      this.form = this.$options.data.call(this).form
     },
     /**
      * Submit Project details to API
@@ -80,11 +80,10 @@ export default {
 
       this.loading = true
 
-      return this.$store.dispatch('api/getCSRF')
+      return this.$store.dispatch('csrf/get')
       .then(() => this.$store.dispatch('project/post', this.form))
-      .then(() => {
-        this.resetForm()
-        this.$router.push({ name: PROJECT.route.name })
+      .then(({ data }) => {
+        this.$router.push({ name: PROJECT.route.name, params: { id: data.id } })
       })
       .catch(err => this.handleError(err))
       .finally(() => this.loading = false)

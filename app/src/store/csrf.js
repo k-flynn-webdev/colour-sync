@@ -1,5 +1,5 @@
-import { CSRF } from '@/constants';
-import HTTP from '@/services/HttpService'
+import { CSRF } from 'src/constants';
+import HTTP from 'src/services/HttpService'
 
 const TIME_CHECK = 30 * 60 * 1000; /* ms */
 

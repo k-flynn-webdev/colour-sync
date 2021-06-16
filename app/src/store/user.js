@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import { USER } from '@/constants';
-import HTTP from '@/services/HttpService'
+import { USER } from 'src/constants';
+import HTTP from 'src/services/HttpService'
 
 
 /**

@@ -108,7 +108,7 @@ export const ADMIN = {
  * @returns {boolean}
  */
 function checkProject (input) {
-  const isNameValid = (input && input.name && input.name.length >= 6)
+  const isNameValid = (input && input.name && input.name.length >= 5)
   return isNameValid
 }
 
@@ -119,6 +119,7 @@ export const PROJECT = {
     LIST: '/api/project/',
     GET: '/api/project/',
     POST: '/api/project/',
+    PATCH: '/api/project/',
     DELETE: '/api/project/',
   },
   route: { name: 'project', href: '/project' },

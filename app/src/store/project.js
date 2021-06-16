@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import { PROJECT } from '@/constants';
-import HTTP from '@/services/HttpService'
+import { PROJECT } from 'src/constants';
+import HTTP from 'src/services/HttpService'
 
 
 /**
@@ -74,6 +74,20 @@ const mutations = {
 }
 const actions = {
   /**
+   * List Projects via API
+   *
+   * @param {object}  context
+   * @param {object}  pageControls
+   * @return {Promise}
+   */
+  list: function (context, pageControls) {
+    return HTTP.get(PROJECT.API.GET, pageControls)
+    .then(({ data }) => {
+      context.commit('set', data.data)
+      return data.data
+    })
+  },
+  /**
    * Get Project details via API
    *
    * @param {object}  context
@@ -81,7 +95,7 @@ const actions = {
    * @return {Promise}
    */
   get: function (context, id) {
-    return HTTP.get(`${PROJECT.API.GET}/${id}`)
+    return HTTP.get(`${PROJECT.API.GET}/${id}/`)
     .then(({ data }) => {
       context.commit('set', data.data)
       return data.data
@@ -95,7 +109,7 @@ const actions = {
    * @return {Promise}
    */
   post: function (context, data) {
-    return HTTP.post(PROJECT.API.POST, data)
+    return HTTP.post(`${PROJECT.API.POST}/`, data)
     .then(({ data }) => {
       context.commit('post', data.data)
       return data.data
@@ -109,7 +123,7 @@ const actions = {
    * @return {Promise}
    */
   patch: function (context, data) {
-    return HTTP.post(PROJECT.API.PATCH, data)
+    return HTTP.patch(`${PROJECT.API.PATCH}/${data.id}/`, data)
     .then(({ data }) => {
       context.commit('patch', data.data)
       return data.data
@@ -123,7 +137,7 @@ const actions = {
    * @return {Promise}
    */
   remove: function (context, id) {
-    return HTTP.remove(`${PROJECT.API.DELETE}/${id}`)
+    return HTTP.remove(`${PROJECT.API.DELETE}/${id}/`)
     .then(({ data }) => {
       context.commit('remove', id)
       return data.data
