@@ -1,6 +1,7 @@
 from project.serializers import ProjectSerializer
 from rest_framework import generics, permissions
 from project.models import Project
+from libs import mixins
 
 
 class ProjectList(generics.ListCreateAPIView):
@@ -17,6 +18,7 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
         permissions.IsAuthenticatedOrReadOnly,
     )
     serializer_class = ProjectSerializer
+    # renderer_classes = [mixins.CustomRenderer]
 
 
 
