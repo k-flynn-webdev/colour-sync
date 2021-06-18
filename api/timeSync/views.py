@@ -1,6 +1,7 @@
 from timeSync.serializers import TimeSyncSerializer
 from rest_framework import generics, permissions
 from timeSync.models import TimeSync
+from libs import mixins, pagination
 
 
 class TimeSyncList(generics.ListCreateAPIView):
@@ -9,6 +10,8 @@ class TimeSyncList(generics.ListCreateAPIView):
         permissions.IsAuthenticatedOrReadOnly,
     )
     serializer_class = TimeSyncSerializer
+    renderer_classes = [mixins.CustomRenderer]
+    pagination_class = pagination.LimitOffsetPagination
 
 
 class TimeSyncDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -17,3 +20,4 @@ class TimeSyncDetail(generics.RetrieveUpdateDestroyAPIView):
         permissions.IsAuthenticatedOrReadOnly,
     )
     serializer_class = TimeSyncSerializer
+    renderer_classes = [mixins.CustomRenderer]

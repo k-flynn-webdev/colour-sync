@@ -1,5 +1,3 @@
-from rest_framework.response import Response
-
 from project.serializers import ProjectSerializer
 from rest_framework import generics, permissions
 from project.models import Project
