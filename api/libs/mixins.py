@@ -11,11 +11,12 @@ class CustomRenderer(JSONRenderer):
         pagination: {}
     ]
     """
-    def render(self, data, accepted_media_type=None, renderer_context=None, detail=None):
+    def render(self, data, accepted_media_type=None, renderer_context=None):
         status_code = renderer_context['response'].status_code
 
         temp_data = data
         temp_page = None
+        temp_detail = None
         # split data into pagination parts
         if data.get('data'):
             temp_data = data.get('data')
@@ -25,17 +26,15 @@ class CustomRenderer(JSONRenderer):
                 'previous': data.get('previous')
             }
 
-        detail_found = detail
-        if hasattr(self, 'detail'):
-            detail_found = self.detail
+        if data.get('detail'):
+            temp_detail = data.get('detail')
 
-        response = create_response(temp_data, status_code, detail_found)
+        data_to_render = create_response(temp_data, status_code, temp_detail)
 
         if temp_page:
-            response.update(temp_page)
-            print(temp_page)
+            data_to_render.update(temp_page)
 
-        return super(CustomRenderer, self).render(response, accepted_media_type, renderer_context)
+        return super(CustomRenderer, self).render(data_to_render, accepted_media_type, renderer_context)
 
 
 def create_response(data, status_code, detail):
@@ -68,5 +67,5 @@ def create_response(data, status_code, detail):
     return response
 
 
-def custom_renderer_basic(data, status_code, detail):
-    return JsonResponse(create_response(data, status_code, detail))
+def custom_renderer_basic(data_to_render, status_code, detail):
+    return JsonResponse(create_response(data_to_render, status_code, detail))
