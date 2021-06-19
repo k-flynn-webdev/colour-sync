@@ -47,7 +47,12 @@ export default {
   data () {
     return {
       loading: false,
-      projects: []
+    }
+  },
+
+  computed: {
+    projects () {
+      return this.$store.state.project.projects
     }
   },
 
@@ -65,7 +70,6 @@ export default {
       this.loading = true
       const pageQuery = this.$route.query.page || 0
       const promise = this.$store.dispatch("project/list", pageQuery)
-          .then(data => { this.projects = data })
           .catch(err => this.handleError(err))
 
       promise.finally(() => this.loading = false)
