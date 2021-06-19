@@ -102,16 +102,27 @@ export default {
      */
     onSubmit () {
       if (this.loading) return
+      if (!this.hasChanges) return
       if (!PROJECT.isValid(this.form)) return
 
       this.loading = true
 
-      return this.$store.dispatch('project/post', this.form)
-          .then(() => {
-            this.$message.add({ message: 'Project updated.' })
-          })
+      const patchData = Object.keys(this.itemData).reduce((acc, current) => {
+        if (this.itemData[current] === this.form[current]) return acc
+        acc[current] = this.form[current]
+        return acc
+      }, {})
+
+      const promise = this.$store.dispatch(
+          'project/patch', { id: this.itemId, data: patchData })
+          .then(() => this.$message.add({ message: 'Project updated.' }))
+          .then(() => this.$router.push({ name: 'project-list' }))
           .catch(err => this.handleError(err))
+
+      promise
           .finally(() => this.loading = false)
+
+      return promise
     }
   }
 }

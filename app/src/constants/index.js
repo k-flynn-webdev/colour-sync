@@ -119,8 +119,8 @@ export const PROJECT = {
     LIST: '/api/project/',
     GET: '/api/project/',
     POST: '/api/project/',
-    PATCH: '/api/project/',
-    DELETE: '/api/project/',
+    PATCH: '/api/project',
+    DELETE: '/api/project',
   },
   route: { name: 'project', href: '/project' },
   isValid: checkProject

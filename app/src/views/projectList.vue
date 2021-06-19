@@ -61,7 +61,7 @@ export default {
   },
 
   methods: {
-    /** Returns projects list via API
+    /** Returns Projects list via API
      *
      * @returns {Promise|void}
      */

@@ -1,7 +1,7 @@
 <template>
   <div class="column is-7-tablet is-6-desktop is-4-widescreen project">
     <form class="box"
-          @submit.prevent="submit">
+          @submit.prevent="onSubmit">
       <div class="field">
         <label for="id-name" class="label">
           Name
@@ -72,21 +72,23 @@ export default {
     /**
      * Submit Project details to API
      *
-     * @returns {void|Promise<boolean>}
+     * @returns {Promise|void}
      */
-    submit () {
+    onSubmit () {
       if (this.loading) return
       if (!PROJECT.isValid(this.form)) return
 
       this.loading = true
 
-      return this.$store.dispatch('project/post', this.form)
-          .then(({ data }) => {
-            this.$message.add({ message: 'Project created.' })
-            this.$router.push({ name: 'project-view', params: { project: data.id } })
-          })
+      const promise = this.$store.dispatch('project/post', this.form)
+          .then(() => this.$message.add({ message: 'Project created.' }))
+          .then(() => this.$router.push({ name: 'project-list' }))
           .catch(err => this.handleError(err))
+
+      promise
           .finally(() => this.loading = false)
+
+      return promise
     }
   }
 }

@@ -137,12 +137,13 @@ const actions = {
   /**
    * Patch Project details via API
    *
-   * @param {object}  context
-   * @param {Project}  data
+   * @param {object}    context
+   * @param {Number}    id
+   * @param {Project}   data
    * @return {Promise}
    */
-  patch: function (context, data) {
-    return HTTP.patch(`${PROJECT.API.PATCH}/${data.id}/`, data)
+  patch: function (context, {id, data}) {
+    return HTTP.patch(`${PROJECT.API.PATCH}/${id}/`, data)
     .then(({ data }) => {
       context.commit('patch', data.data)
       return data.data
