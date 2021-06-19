@@ -8,6 +8,7 @@
           <th>Name</th>
           <th>Owner</th>
           <th>Meta</th>
+          <th>Sheets</th>
           <th>Updated</th>
           <th>Created</th>
           <th>Deleted</th>
@@ -22,6 +23,7 @@
           <td>{{ item.name }}</td>
           <td>{{ item.owner || '--' }}</td>
           <td>{{ item.meta }}</td>
+          <td>{{ item.sheets }}</td>
           <td>{{ item.updatedAt | itemDate | itemIsNull }}</td>
           <td>{{ item.createdAt | itemDate | itemIsNull }}</td>
           <td>{{ item.deletedAt | itemDate | itemIsNull }}</td>
