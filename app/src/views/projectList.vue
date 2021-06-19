@@ -1,44 +1,34 @@
 <template>
-  <div class="column is-7-tablet is-6-desktop is-4-widescreen project">
-    <form class="box"
-          @submit.prevent="submit">
-      <div class="field">
-        <label for="id-name" class="label">
-          Name
-        </label>
-        <div class="control">
-          <input id="id-name"
-                 v-model="form.name"
-                 class="input"
-                 type="text"
-                 minlength="6"
-                 placeholder="e.g. new project 2021"
-                 required
-          >
-        </div>
-      </div>
-      <div class="field">
-        <label for="id-meta"
-               class="label">
-          Meta
-        </label>
-        <div class="control">
-          <input id="id-meta"
-                 v-model="form.meta"
-                 type="text"
-                 class="input"
-                 placeholder="eg your notes: release by xxx date?"
-          >
-        </div>
-      </div>
-
-      <div class="field mt-5">
-        <button class="button is-success">
-          {{ loading ? '...' : 'Create' }}
-        </button>
-      </div>
-
-    </form>
+  <div class="column is-7-tablet1 is-6-desktop1 is-4-widescreen1 project">
+    <div class="table-container">
+      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Owner</th>
+          <th>Meta</th>
+          <th>Updated</th>
+          <th>Created</th>
+          <th>Deleted</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+            v-for="(item, key) in projects"
+            :key="key"
+        >
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.owner || '--' }}</td>
+          <td>{{ item.meta }}</td>
+          <td>{{ item.updatedAt | itemDate | itemIsNull }}</td>
+          <td>{{ item.createdAt | itemDate | itemIsNull }}</td>
+          <td>{{ item.deletedAt | itemDate | itemIsNull }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </template>
@@ -48,7 +38,7 @@ import { PROJECT } from '@/constants'
 import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
 export default {
-  name: 'project-create',
+  name: 'project-list',
 
   mixins: [
     genericErrMixin
@@ -57,35 +47,29 @@ export default {
   data () {
     return {
       loading: false,
-      form: {
-        name: '',
-        meta: '',
-      }
+      projects: []
     }
   },
 
+  created () {
+    return this.getProjectsList()
+  },
+
   methods: {
-    /** Reset form */
-    resetForm () {
-      this.form = this.$options.data.call(this).form
-    },
-    /**
-     * Submit Project details to API
+    /** Returns projects list via API
      *
-     * @returns {void|Promise<boolean>}
+     * @returns {Promise|void}
      */
-    submit () {
+    getProjectsList () {
       if (this.loading) return
-      if (!PROJECT.isValid(this.form)) return
-
       this.loading = true
-
-      return this.$store.dispatch('project/post', this.form)
-          .then(({ data }) => {
-            this.$router.push({ name: PROJECT.route.name, params: { id: data.id } })
-          })
+      const pageQuery = this.$route.query.page || 0
+      const promise = this.$store.dispatch("project/list", pageQuery)
+          .then(data => { this.projects = data })
           .catch(err => this.handleError(err))
-          .finally(() => this.loading = false)
+
+      promise.finally(() => this.loading = false)
+      return promise
     }
   }
 }

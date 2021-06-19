@@ -72,10 +72,13 @@ export default {
 
   created () {
     if (this.itemData) return
+    this.loading = true
     return this.$store.dispatch('project/get', this.itemId)
     .then(data => {
       this.form = Object.assign({}, data)
     })
+    .catch(err => this.handleError(err))
+    .finally(() => this.loading = false)
   },
 
   methods: {

@@ -96,11 +96,11 @@ const actions = {
    * List Projects via API
    *
    * @param {object}  context
-   * @param {object}  pageControls
+   * @param {object}  pageQuery
    * @return {Promise}
    */
-  list: function (context, pageControls) {
-    return HTTP.get(PROJECT.API.GET, pageControls)
+  list: function (context, pageQuery) {
+    return HTTP.get(PROJECT.API.GET, pageQuery)
     .then(({ data }) => {
       context.commit('set', data.data)
       return data.data
