@@ -27,13 +27,25 @@ function initState () {
   }
 }
 
+const getters = {
+    /**
+   * Gets a Project from state via ID
+   *
+   * @param {object}  state
+   * @param {number}  id
+   * @returns {Project|void}
+   */
+  getById: (state) => (id) => {
+    return state.projects.find(item => item.id === id)
+  }
+}
 
 const mutations = {
   /**
    * Sets the Project state
    *
-   * @param {object}  state
-   * @param {Project[]}    input
+   * @param {object}      state
+   * @param {Project[]}   input
    */
   set: function (state, input) {
     Vue.set(state, 'projects', input)
@@ -42,7 +54,7 @@ const mutations = {
    * Add a Project
    *
    * @param {object}    state
-   * @param {Project}   data
+   * @param {Project}   data    Project data
    */
   post: function (state, data) {
     state.projects.push(data)
@@ -51,14 +63,21 @@ const mutations = {
    * Patch a Project
    *
    * @param {object}    state
-   * @param {Project}   data
+   * @param {Project}   data          Project data
+   * @param {Boolean}   addIfMissing  Add to state if not found
    */
-  patch: function (state, data) {
+  patch: function (state, data, addIfMissing=true) {
+    let updated = false
     state.projects.forEach(item => {
       if (item.id === data.id) {
         item = data
+        updated = true
       }
     })
+
+    if (!updated && !addIfMissing) return
+
+    state.projects.push(data)
   },
   /**
    * Remove a Project
@@ -97,7 +116,7 @@ const actions = {
   get: function (context, id) {
     return HTTP.get(`${PROJECT.API.GET}/${id}/`)
     .then(({ data }) => {
-      context.commit('set', data.data)
+      context.commit('patch', data.data)
       return data.data
     })
   },
@@ -148,6 +167,7 @@ const actions = {
 export default {
   namespaced: true,
   state: initState(),
+  getters: getters,
   mutations: mutations,
   actions: actions
 }

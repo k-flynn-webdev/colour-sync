@@ -48,7 +48,7 @@ import { PROJECT } from '@/constants'
 import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
 export default {
-  name: 'project',
+  name: 'project-create',
 
   mixins: [
     genericErrMixin
@@ -80,13 +80,12 @@ export default {
 
       this.loading = true
 
-      return this.$store.dispatch('csrf/get')
-      .then(() => this.$store.dispatch('project/post', this.form))
-      .then(({ data }) => {
-        this.$router.push({ name: PROJECT.route.name, params: { id: data.id } })
-      })
-      .catch(err => this.handleError(err))
-      .finally(() => this.loading = false)
+      return this.$store.dispatch('project/post', this.form)
+          .then(({ data }) => {
+            this.$router.push({ name: PROJECT.route.name, params: { id: data.id } })
+          })
+          .catch(err => this.handleError(err))
+          .finally(() => this.loading = false)
     }
   }
 }

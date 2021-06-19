@@ -49,7 +49,7 @@ const actions = {
 
     return HTTP.get(CSRF.API.GET)
     .then(({ data }) => {
-      context.commit('token', data.token)
+      context.commit('token', data.data)
       return data.token
     })
   }
