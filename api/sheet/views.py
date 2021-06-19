@@ -13,8 +13,14 @@ class SheetList(generics.ListCreateAPIView):
     renderer_classes = [mixins.CustomRenderer]
     pagination_class = pagination.LimitOffsetPagination
 
+    def post(self, request, *args, **kwargs):
+        # //    todo override serilizer class for creation of an object replacing
+        # //    `owner` with request.user
+        # //    I wanna use the DRF way if possible
+        return self.create(request, *args, **kwargs)
 
-class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
+
+class SheetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sheet.objects.all()
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,

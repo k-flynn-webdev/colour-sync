@@ -8,7 +8,7 @@ class Project(models.Model):
     name = models.CharField(max_length=255, blank=False, default='')
     owner = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
-    meta = models.CharField(max_length=255, blank=False, default='')
+    meta = models.CharField(max_length=255, blank=True, null=True)
 
     updatedAt = models.DateTimeField(auto_now_add=True)
     createdAt = models.DateTimeField(auto_now_add=True)
