@@ -1,5 +1,7 @@
+from rest_framework.response import Response
+
 from sheet.serializers import SheetSerializer
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from sheet.models import Sheet
 from libs import mixins, pagination
 
@@ -14,10 +16,13 @@ class SheetList(generics.ListCreateAPIView):
     pagination_class = pagination.LimitOffsetPagination
 
     def post(self, request, *args, **kwargs):
-        # //    todo override serilizer class for creation of an object replacing
-        # //    `owner` with request.user
-        # //    I wanna use the DRF way if possible
-        return self.create(request, *args, **kwargs)
+        temp_data = request.data
+        temp_data['owner'] = request.user.id
+        serializer = SheetSerializer(data=temp_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
 class SheetDetail(generics.RetrieveUpdateDestroyAPIView):

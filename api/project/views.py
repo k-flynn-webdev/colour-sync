@@ -15,9 +15,11 @@ class ProjectList(generics.ListCreateAPIView):
     pagination_class = pagination.LimitOffsetPagination
 
     def post(self, request, *args, **kwargs):
-        serializer = ProjectSerializer(data=request.data)
+        temp_data = request.data
+        temp_data['owner'] = request.user.id
+        serializer = ProjectSerializer(data=temp_data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(owner=request.user)
+        serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 

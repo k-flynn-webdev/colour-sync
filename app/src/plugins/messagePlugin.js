@@ -6,7 +6,7 @@
  * @property {string}   class
  * @property {boolean}  closeable     default = true
  * @property {number}   timeDelay     Time in seconds
- * @property {number}   timeDisplay   Time in seconds
+ * @property {number}   timeDisplay   Time in seconds, default = 10s
  */
 import message from "@/components/message";
 
@@ -37,6 +37,7 @@ const generateId = (input) => {
 const createMessage = (msg) => {
   msg.id = generateId(msg.message)
   msg.closeable = msg.closeable || true
+  msg.timeDisplay = msg.timeDisplay || 10
 
   for(let i = 0; i < opts.items.length; i++ ) {
     if (opts.items[i].id === msg.id) return false

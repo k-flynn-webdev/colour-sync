@@ -1,6 +1,7 @@
 import Vue from 'vue'
-import { PROJECT } from '@/constants';
+import { SHEET } from '@/constants';
 import HTTP from '@/services/HttpService'
+
 
 /**
  * Returns initial store state
@@ -9,52 +10,52 @@ import HTTP from '@/services/HttpService'
  */
 function initState () {
   return {
-    projects: []
+    sheets: []
   }
 }
 
 const getters = {
     /**
-   * Gets a Project from state via ID
+   * Gets a Sheet from state via ID
    *
    * @param {object}  state
    * @param {number}  id
-   * @returns {Project|void}
+   * @returns {sheet|void}
    */
   getById: (state) => (id) => {
-    return state.projects.find(item => item.id === id)
+    return state.sheets.find(item => item.id === id)
   }
 }
 
 const mutations = {
   /**
-   * Sets the Project state
+   * Sets the Sheet state
    *
-   * @param {object}      state
-   * @param {Project[]}   input
+   * @param {object}    state
+   * @param {Sheet[]}   input
    */
   set: function (state, input) {
-    Vue.set(state, 'projects', input)
+    Vue.set(state, 'sheets', input)
   },
   /**
-   * Add a Project
+   * Add a Sheet
    *
-   * @param {object}    state
-   * @param {Project}   data    Project data
+   * @param {object}  state
+   * @param {Sheet}   data    sheet data
    */
   post: function (state, data) {
-    state.projects.push(data)
+    state.sheets.push(data)
   },
   /**
-   * Patch a Project
+   * Patch a Sheet
    *
    * @param {object}    state
-   * @param {Project}   data          Project data
+   * @param {Sheet}     data          sheet data
    * @param {Boolean}   addIfMissing  Add to state if not found
    */
   patch: function (state, data, addIfMissing=true) {
     let updated = false
-    state.projects.forEach(item => {
+    state.sheets.forEach(item => {
       if (item.id === data.id) {
         item = data
         updated = true
@@ -63,87 +64,87 @@ const mutations = {
 
     if (!updated && !addIfMissing) return
 
-    state.projects.push(data)
+    state.sheets.push(data)
   },
   /**
-   * Remove a Project
+   * Remove a Sheet
    *
    * @param {object}  state
-   * @param {Number}  id
+   * @param {number}  id
    */
   remove: function (state, id) {
-    let count = state.projects.findIndex(item => item.id === id)
+    let count = state.sheets.findIndex(item => item.id === id)
     if (count < 0) return
-    state.projects.splice(count, 1)
+    state.sheets.splice(count, 1)
   }
 }
 const actions = {
   /**
-   * List Projects via API
+   * List Sheets via API
    *
    * @param {object}  context
    * @param {object}  pageQuery
    * @return {Promise}
    */
   list: function (context, pageQuery) {
-    return HTTP.get(PROJECT.API.GET, pageQuery)
+    return HTTP.get(SHEET.API.GET, pageQuery)
     .then(({ data }) => {
       context.commit('set', data.data)
       return data.data
     })
   },
   /**
-   * Get Project details via API
+   * Get Sheet details via API
    *
    * @param {object}  context
    * @param {number}  id
    * @return {Promise}
    */
   get: function (context, id) {
-    return HTTP.get(`${PROJECT.API.GET}/${id}/`)
+    return HTTP.get(`${SHEET.API.GET}/${id}/`)
     .then(({ data }) => {
       context.commit('patch', data.data)
       return data.data
     })
   },
   /**
-   * Post Project details via API
+   * Post Sheet details via API
    *
    * @param {object}  context
-   * @param {Project}  data
+   * @param {Sheet}  data
    * @return {Promise}
    */
   post: function (context, data) {
-    return HTTP.post(`${PROJECT.API.POST}/`, data)
+    return HTTP.post(`${SHEET.API.POST}/`, data)
     .then(({ data }) => {
       context.commit('post', data.data)
       return data.data
     })
   },
   /**
-   * Patch Project details via API
+   * Patch Sheet details via API
    *
    * @param {object}    context
    * @param {Number}    id
-   * @param {Project}   data
+   * @param {Sheet}     data
    * @return {Promise}
    */
   patch: function (context, {id, data}) {
-    return HTTP.patch(`${PROJECT.API.PATCH}/${id}/`, data)
+    return HTTP.patch(`${SHEET.API.PATCH}/${id}/`, data)
     .then(({ data }) => {
       context.commit('patch', data.data)
       return data.data
     })
   },
   /**
-   * Delete Project via API
+   * Delete Sheet via API
    *
    * @param {object}  context
    * @param {number}  id
    * @return {Promise}
    */
   remove: function (context, id) {
-    return HTTP.remove(`${PROJECT.API.DELETE}/${id}/`)
+    return HTTP.remove(`${SHEET.API.DELETE}/${id}/`)
     .then(({ data }) => {
       context.commit('remove', id)
       return data.data

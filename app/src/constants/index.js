@@ -108,8 +108,10 @@ export const ADMIN = {
  * @returns {boolean}
  */
 function checkProject (input) {
-  const isNameValid = (input && input.name && input.name.length >= 5)
-  return isNameValid
+  if (!input) return false
+  const isNameValid = (input.name && input.name.length >= 5)
+  const isMetaValid = (input.meta ? input.meta.length >= 5 : true)
+  return (isNameValid && isMetaValid)
 }
 
 export const PROJECT = {
@@ -123,7 +125,8 @@ export const PROJECT = {
     DELETE: '/api/project',
   },
   route: { name: 'project', href: '/project' },
-  isValid: checkProject
+  isValid: checkProject,
+  init: projectDefaultObj
 }
 
 /**
@@ -133,10 +136,99 @@ export const PROJECT = {
  * @property {string}   name
  * @property {number}   owner
  * @property {string}   meta
+ * @property {number}   sheets
  * @property {date}     createdAt
  * @property {date}     updatedAt
  * @property {date}     deletedAt
  */
+
+/**
+ * Creates a default Project Obj
+ *
+ * @return {Project} ProjectObj
+ */
+function projectDefaultObj () {
+  return {
+    id: -1,
+    name: '',
+    meta: '',
+    owner: undefined,
+    sheets: -1,
+    createdAt: null,
+    updatedAt: null,
+    deletedAt: null,
+  }
+}
+
+/**
+ * Check Sheet input is valid
+ *
+ * @param   {object}    input   Data to check for validation
+ * @returns {boolean}
+ */
+function checkSheet (input) {
+  if (!input) return false
+  const isNameValid = (input.name && input.name.length >= 5)
+  const isMetaValid = (input.meta ? input.meta.length >= 5 : true)
+  const isDataValid = (input.data && input.data.length >= 5)
+  const isRankingValid = (input.ranking && input.ranking >= 1 && input.ranking <= 999)
+  const isURLValid = (input.url && input.url.length >= 5)
+  return (isNameValid && isMetaValid && isDataValid && isRankingValid && isURLValid)
+}
+
+export const SHEET = {
+  value: 'sheet',
+  store: 'sheet',
+  API: {
+    LIST: '/api/sheet/',
+    GET: '/api/sheet/',
+    POST: '/api/sheet/',
+    PATCH: '/api/sheet',
+    DELETE: '/api/sheet',
+  },
+  route: { name: 'sheet', href: '/sheet' },
+  isValid: checkSheet,
+  init: sheetDefaultObj
+}
+
+/**
+ * @typedef {object}    Sheet
+ *
+ * @property {number}   id
+ * @property {string}   name
+ * @property {number}   owner
+ * @property {number}   project
+ * @property {string}   url
+ * @property {string}   meta
+ * @property {string}   data
+ * @property {number}   ranking
+ * @property {date}     createdAt
+ * @property {date}     updatedAt
+ * @property {date}     deletedAt
+ * //todo add timeSync items here!
+ */
+
+/**
+ * Creates a default Sheet Obj
+ *
+ * @params {number} Project
+ * @return {Sheet}  SheetObj
+ */
+function sheetDefaultObj (project = -1) {
+  return {
+    id: -1,
+    name: '',
+    meta: '',
+    url: '',
+    owner: undefined,
+    project: project,
+    data: '',
+    ranking: 0,
+    createdAt: null,
+    updatedAt: null,
+    deletedAt: null,
+  }
+}
 
 export const ALL = {
   VARS,
@@ -145,5 +237,6 @@ export const ALL = {
   LOGIN,
   LOGOUT,
   REGISTER,
-  PROJECT
+  PROJECT,
+  SHEET
 }

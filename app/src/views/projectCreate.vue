@@ -1,6 +1,7 @@
 <template>
   <div class="column is-7-tablet is-6-desktop is-4-widescreen project">
     <form class="box"
+          @reset="onReset"
           @submit.prevent="onSubmit">
       <div class="field">
         <label for="id-name" class="label">
@@ -33,7 +34,10 @@
       </div>
 
       <div class="field mt-5">
-        <button class="button is-success">
+        <button
+            class="button is-success"
+            :disabled="!isValid"
+        >
           {{ loading ? '...' : 'Create' }}
         </button>
       </div>
@@ -57,16 +61,19 @@ export default {
   data () {
     return {
       loading: false,
-      form: {
-        name: '',
-        meta: '',
-      }
+      form: PROJECT.init()
+    }
+  },
+
+  computed: {
+    isValid() {
+      return PROJECT.isValid(this.form)
     }
   },
 
   methods: {
     /** Reset form */
-    resetForm () {
+    onReset () {
       this.form = this.$options.data.call(this).form
     },
     /**
@@ -76,7 +83,7 @@ export default {
      */
     onSubmit () {
       if (this.loading) return
-      if (!PROJECT.isValid(this.form)) return
+      if (!this.isValid) return
 
       this.loading = true
 
