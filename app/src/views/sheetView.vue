@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-7-tablet is-6-desktop is-4-widescreen project">
+  <div class="column is-7-tablet is-6-desktop is-4-widescreen sheet">
     <form class="box"
           @submit.prevent="onSubmit">
 
@@ -26,7 +26,7 @@
       <div class="field mt-5">
         <button
             class="button is-success"
-            :disabled="!hasChanges"
+            :disabled="!hasChanges || !isValid"
         >
           {{ loading ? '...' : 'Update' }}
         </button>
@@ -38,11 +38,11 @@
 </template>
 
 <script>
-import { PROJECT } from '@/constants'
+import { SHEET } from '@/constants'
 import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
 export default {
-  name: 'project-view',
+  name: 'sheet-view',
 
   mixins: [
     genericErrMixin
@@ -57,10 +57,13 @@ export default {
 
   computed: {
     itemId () {
-      return Number(this.$route.params.project)
+      return Number(this.$route.params.sheet)
     },
     itemData () {
-      return this.$store.getters["project/getById"](this.itemId)
+      return this.$store.getters["sheet/getById"](this.itemId)
+    },
+    isValid() {
+      return SHEET.isValid(this.form)
     },
     hasChanges () {
       if (!this.itemData) return false
@@ -70,15 +73,19 @@ export default {
     }
   },
 
-  created () {
-    if (this.itemData) return
-    this.loading = true
-    return this.$store.dispatch('project/get', this.itemId)
-    .then(data => {
-      this.form = Object.assign({}, data)
+  /** Returns Sheet data via API */
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (vm.itemData) {
+        vm.resetForm()
+        return
+      }
+      vm.loading = true
+      return vm.$store.dispatch('sheet/get', vm.itemId)
+          .then(() => vm.resetForm())
+          .catch(err => vm.handleError(err))
+          .finally(() => vm.loading = false)
     })
-    .catch(err => this.handleError(err))
-    .finally(() => this.loading = false)
   },
 
   methods: {
@@ -93,17 +100,17 @@ export default {
     },
     /** Reset form */
     resetForm () {
-      this.form = this.$options.data.call(this).form
+      this.form = Object.assign({}, this.itemData)
     },
     /**
-     * Submit Project details to API
+     * Submit Sheet details to API
      *
      * @returns {void|Promise<boolean>}
      */
     onSubmit () {
       if (this.loading) return
       if (!this.hasChanges) return
-      if (!PROJECT.isValid(this.form)) return
+      if (!SHEET.isValid(this.form)) return
 
       this.loading = true
 
@@ -114,9 +121,9 @@ export default {
       }, {})
 
       const promise = this.$store.dispatch(
-          'project/patch', { id: this.itemId, data: patchData })
-          .then(() => this.$message.add({ message: 'Project updated.' }))
-          .then(() => this.$router.push({ name: 'project-list' }))
+          'sheet/patch', { id: this.itemId, data: patchData })
+          .then(() => this.$message.add({ message: 'Sheet updated.' }))
+          .then(() => this.$router.push({ name: 'sheet-list' }))
           .catch(err => this.handleError(err))
 
       promise

@@ -18,6 +18,7 @@
         <tr
             v-for="(item, key) in projects"
             :key="key"
+            @click="onItemSelect(item.id)"
         >
           <td>{{ item.id }}</td>
           <td>{{ item.name }}</td>
@@ -76,6 +77,18 @@ export default {
 
       promise.finally(() => this.loading = false)
       return promise
+    },
+    /**
+     * View Project via ID
+     *
+     * @param {number} id   item id
+     * @returns {promise}
+     */
+    onItemSelect(id) {
+      return this.$router.push({
+        name: 'project-view',
+        params: { project: id }
+      })
     }
   }
 }
