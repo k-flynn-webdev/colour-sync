@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from libs.mixins import custom_renderer_basic
 
 from .serializers import CustomUserSerializer
 
@@ -14,14 +15,8 @@ class WhoAmIView(APIView):
         try:
             request.user.meta
         except Exception as e:
-            return Response({
-                'detail': 'No user logged in.',
-                'data': {}
-            })
+            return custom_renderer_basic({}, 200, 'No user logged in.')
 
         serializer = CustomUserSerializer(request.user)
-        return Response({
-            'detail': 'User found.',
-            'data': serializer.data
-        })
+        return custom_renderer_basic(serializer.data, 200, 'User found.')
 
