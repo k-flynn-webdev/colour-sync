@@ -1,7 +1,9 @@
 <template>
   <div class="column is-7-tablet1 is-6-desktop1 is-4-widescreen1 project">
+
     <div class="table-container">
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+      <progress v-if="isLoading" class="progress is-large is-info" max="100">60%</progress>
+      <table v-else class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
         <tr>
           <th>ID</th>
@@ -15,8 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr
-            v-for="(item, key) in projects"
+        <tr v-for="(item, key) in projects"
             :key="key"
             @click="onItemSelect(item.id)"
         >
@@ -49,7 +50,7 @@ export default {
 
   data () {
     return {
-      loading: false,
+      isLoading: false,
     }
   },
 
@@ -69,13 +70,13 @@ export default {
      * @returns {Promise|void}
      */
     getProjectsList () {
-      if (this.loading) return
-      this.loading = true
+      if (this.isLoading) return
+      this.isLoading = true
       const pageQuery = this.$route.query.page || 0
       const promise = this.$store.dispatch("project/list", pageQuery)
           .catch(err => this.handleError(err))
 
-      promise.finally(() => this.loading = false)
+      promise.finally(() => this.isLoading = false)
       return promise
     },
     /**

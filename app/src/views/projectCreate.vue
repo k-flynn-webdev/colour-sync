@@ -38,7 +38,7 @@
             class="button is-success"
             :disabled="!isValid"
         >
-          {{ loading ? '...' : 'Create' }}
+          {{ isLoading ? '...' : 'Create' }}
         </button>
       </div>
 
@@ -60,7 +60,7 @@ export default {
 
   data () {
     return {
-      loading: false,
+      isLoading: false,
       form: PROJECT.init()
     }
   },
@@ -82,10 +82,10 @@ export default {
      * @returns {Promise|void}
      */
     onSubmit () {
-      if (this.loading) return
+      if (this.isLoading) return
       if (!this.isValid) return
 
-      this.loading = true
+      this.isLoading = true
 
       const promise = this.$store.dispatch('project/post', this.form)
           .then(() => this.$message.add({ message: 'Project created.' }))
@@ -93,7 +93,7 @@ export default {
           .catch(err => this.handleError(err))
 
       promise
-          .finally(() => this.loading = false)
+          .finally(() => this.isLoading = false)
 
       return promise
     }

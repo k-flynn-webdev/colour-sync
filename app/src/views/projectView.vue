@@ -28,7 +28,7 @@
             class="button is-success"
             :disabled="!hasChanges || !isValid"
         >
-          {{ loading ? '...' : 'Update' }}
+          {{ isLoading ? '...' : 'Update' }}
         </button>
       </div>
 
@@ -50,7 +50,7 @@ export default {
 
   data () {
     return {
-      loading: false,
+      isLoading: false,
       form: {}
     }
   },
@@ -80,11 +80,11 @@ export default {
         vm.resetForm()
         return
       }
-      vm.loading = true
+      vm.isLoading = true
       return vm.$store.dispatch('project/get', vm.itemId)
           .then(() => vm.resetForm())
           .catch(err => vm.handleError(err))
-          .finally(() => vm.loading = false)
+          .finally(() => vm.isLoading = false)
     })
   },
 
@@ -108,11 +108,11 @@ export default {
      * @returns {void|Promise<boolean>}
      */
     onSubmit () {
-      if (this.loading) return
+      if (this.isLoading) return
       if (!this.hasChanges) return
       if (!PROJECT.isValid(this.form)) return
 
-      this.loading = true
+      this.isLoading = true
 
       const patchData = Object.keys(this.itemData).reduce((acc, current) => {
         if (this.itemData[current] === this.form[current]) return acc
@@ -127,7 +127,7 @@ export default {
           .catch(err => this.handleError(err))
 
       promise
-          .finally(() => this.loading = false)
+          .finally(() => this.isLoading = false)
 
       return promise
     }
