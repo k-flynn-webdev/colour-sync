@@ -19,11 +19,10 @@ class Sheet(models.Model):
 
     meta = models.CharField(max_length=255, blank=True, null=True)
 
-    # @property
-    # // todo, project isn't serializable this way need to fix
-    # def projectData(self):
-    #     project = apps.get_model('project.Project')
-    #     return project.objects.filter(id=self.project.id)
+    @property
+    def time_sync_data(self):
+        time_sync = apps.get_model('timeSync.TimeSync')
+        return time_sync.objects.filter(sheet=self.id)
 
     updatedAt = models.DateTimeField(auto_now_add=True)
     createdAt = models.DateTimeField(auto_now_add=True)
