@@ -132,11 +132,11 @@ export const PROJECT = {
 /**
  * @typedef {object}    Project
  *
- * @property {number}   id
+ * @property {number}   [id]
  * @property {string}   name
- * @property {number}   owner
+ * @property {number}   [owner]
  * @property {string}   meta
- * @property {number}   sheets
+ * @property {number}   [sheets]
  * @property {date}     createdAt
  * @property {date}     updatedAt
  * @property {date}     deletedAt
@@ -192,20 +192,20 @@ export const SHEET = {
 }
 
 /**
- * @typedef {object}    Sheet
+ * @typedef {object}      Sheet
  *
- * @property {number}   id
- * @property {string}   name
- * @property {number}   owner
- * @property {number}   project
- * @property {string}   url
- * @property {string}   meta
- * @property {string}   data
- * @property {number}   ranking
- * @property {date}     createdAt
- * @property {date}     updatedAt
- * @property {date}     deletedAt
- * //todo add timeSync items here!
+ * @property {number}     [id]
+ * @property {string}     name
+ * @property {number}     [owner]
+ * @property {number}     project
+ * @property {string}     url
+ * @property {string}     meta
+ * @property {string}     data
+ * @property {number}     ranking     range(1 - 999) 999 being strongest
+ * @property {date}       createdAt
+ * @property {date}       updatedAt
+ * @property {date}       deletedAt
+ * @property {TimeSync[]} [time_sync_data]
  */
 
 /**
@@ -230,6 +230,73 @@ function sheetDefaultObj (project = -1) {
   }
 }
 
+/**
+ * Check TimeSync input is valid
+ *
+ * @param   {object}    input   Data to check for validation
+ * @returns {boolean}
+ */
+function checkTimeSync (input) {
+  // todo
+  if (!input) return false
+  const isNameValid = (input.name && input.name.length >= 5)
+  const isMetaValid = (input.meta ? input.meta.length >= 5 : true)
+  const isDataValid = (input.data && input.data.length >= 5)
+  const isRankingValid = (input.ranking && input.ranking >= 1 && input.ranking <= 999)
+  const isURLValid = (input.url && input.url.length >= 5)
+  return (isNameValid && isMetaValid && isDataValid && isRankingValid && isURLValid)
+}
+
+export const TIMESYNC = {
+  value: 'timesync',
+  store: 'timesync',
+  API: {
+    LIST: '/api/timesync/',
+    GET: '/api/timesync/',
+    POST: '/api/timesync/',
+    PATCH: '/api/timesync',
+    DELETE: '/api/timesync',
+  },
+  route: { name: 'timesync', href: '/timesync' },
+  isValid: checkTimeSync,
+  init: timeSyncDefaultObj
+}
+
+/**
+ * @typedef {object}    TimeSync
+ *
+ * @property {number}   [id]
+ * @property {number}   [owner]
+ * @property {number}   sheet
+ * @property {string}   meta
+ * @property {date}     timeStart
+ * @property {number}   timeDuration    In days
+ * @property {string}   repeatType      Enum (None:NO,Day:DY,Week:WK,Month:MH,Year:YR)
+ * @property {number}   repeatVal       In days
+ * @property {date}     createdAt
+ * @property {date}     updatedAt
+ */
+
+/**
+ * Creates a default TimeSync Obj
+ *
+ * @params {number}     Sheet
+ * @return {TimeSync}   TimeSyncObj
+ */
+function timeSyncDefaultObj (sheet = -1) {
+  return {
+    id: -1,
+    owner: undefined,
+    meta: '',
+    sheet: sheet,
+    timeStart: new Date(),
+    timeDuration: 7,
+    repeatType: 'NO',
+    repeatVal: 0,
+    createdAt: null,
+    updatedAt: null,
+  }
+}
 export const ALL = {
   VARS,
   CSRF,
