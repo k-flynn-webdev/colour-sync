@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div v-if="isLoggedIn" class="has-text-right">
-      <div class="is-uppercase email">{{ userEmail }}</div>
-      <a :href="url_logout.href" class="button is-success is-smaller">
-        <cross-icon :class-items="'close'" />
-      </a>
+    <div v-if="!update" class="span-comma">
+      <span class="id">[{{ timeSync.id }}]</span>
+      <span class="meta show-on-hover">{{ timeSync.meta }}</span>
+      <span class="time-start">{{ timeSync.timeStart | itemDate }}</span>
+      <span class="time-duration">{{ timeSync.timeDuration }}</span>
+      <span class="repeat-type">{{ timeSync.repeatType }}</span>
+      <span class="repeat-val">{{ timeSync.repeatVal }}</span>
+      <span class="created-at">{{ timeSync.createdAt | itemDate }}</span>
+      <span class="updated-at">{{ timeSync.updatedAt | itemDate }}</span>
     </div>
-
-    <a :href="url_login.href" v-else >
-      Login
-    </a>
   </div>
 </template>
 
@@ -28,29 +28,42 @@ export default {
     genericErrMixin
   ],
 
-  mounted () {
-    return this.$store.dispatch(`${CSRF.store}/get`)
-    .then(() => this.$store.dispatch(`${USER.store}/get`))
-    .catch(err => this.handleError(err))
+  props: {
+    /** @type {Boolean} Allow TimeSync to be created */
+    create: {
+      required: false,
+      default: false,
+      type: Boolean
+    },
+    /** @type {Boolean} Allow TimeSync to be updated */
+    update: {
+      required: false,
+      default: false,
+      type: Boolean
+    },
+    /** @type {Boolean} Allow TimeSync to be deleted */
+    remove: {
+      required: false,
+      default: false,
+      type: Boolean
+    },
+    /** @type {TimeSync} */
+    timeSync: {
+      required: true,
+      type: Object
+    }
   },
 
   data () {
     return {
-      url_login: LOGIN.route,
-      url_logout: LOGOUT.route,
     }
   },
 
   computed: {
-    userName () {
-      return this.$store.state[USER.store].username
-    },
-    userEmail () {
-      return this.$store.state[USER.store].email
-    },
-    isLoggedIn () {
-      return !!this.userEmail
-    }
+  },
+
+  methods: {
+
   }
 }
 </script>

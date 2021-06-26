@@ -3,6 +3,13 @@ from django.db import models
 from sheet.models import Sheet
 
 User = user_model()
+REPEAT_CHOICES = [
+    ('NO', 'None'),
+    ('DY', 'Day'),
+    ('WK', 'Week'),
+    ('MH', 'Month'),
+    ('YR', 'Year'),
+]
 
 
 class TimeSync(models.Model):
@@ -18,13 +25,6 @@ class TimeSync(models.Model):
     timeDuration = models.PositiveBigIntegerField(default=7)
     """ Time duration, in days, default week """
 
-    REPEAT_CHOICES = [
-        ('NO', 'None'),
-        ('DY', 'Day'),
-        ('WK', 'Week'),
-        ('MH', 'Month'),
-        ('YR', 'Year'),
-    ]
     repeatType = models.CharField(
         max_length=2,
         default='NO',

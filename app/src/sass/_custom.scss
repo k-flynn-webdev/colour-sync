@@ -83,4 +83,12 @@ html {
       }
     }
   }
+
+  .span-comma {
+    span {
+      &:not(:empty)::after { content: ", "; }
+      &:last-of-type::after { content: ""; }
+    }
+    .id::after { content: " "; }
+  }
 }

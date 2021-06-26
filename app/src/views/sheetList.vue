@@ -13,6 +13,7 @@
           <th>Data</th>
           <th>Ranking</th>
           <th>Meta</th>
+          <th>Time</th>
           <th>Updated</th>
           <th>Created</th>
           <th>Deleted</th>
@@ -32,6 +33,16 @@
           <td>{{ item.data }}</td>
           <td>{{ item.ranking }}</td>
           <td>{{ item.meta }}</td>
+          <td>
+            <template v-if="item.time_sync_data">
+              <time-sync
+                v-for="(time, idx) in item.time_sync_data"
+                :key="time.id || idx"
+                :time-sync="time"
+              />
+            </template>
+            <template v-else>--</template>
+          </td>
           <td>{{ item.updatedAt | itemDate | itemIsNull }}</td>
           <td>{{ item.createdAt | itemDate | itemIsNull }}</td>
           <td>{{ item.deletedAt | itemDate | itemIsNull }}</td>
@@ -45,10 +56,15 @@
 
 <script>
 import { SHEET } from '@/constants'
+import timeSync from '@/components/time-sync'
 import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
 export default {
   name: 'sheet-list',
+
+  components: {
+    timeSync
+  },
 
   mixins: [
     genericErrMixin
