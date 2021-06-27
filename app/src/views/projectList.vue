@@ -8,7 +8,6 @@
         <tr>
           <th>ID</th>
           <th>Name</th>
-          <th>Owner</th>
           <th>Meta</th>
           <th>Sheets</th>
           <th>Updated</th>
@@ -23,7 +22,6 @@
         >
           <td>{{ item.id }}</td>
           <td>{{ item.name }}</td>
-          <td>{{ item.owner || '--' }}</td>
           <td>{{ item.meta }}</td>
           <td>{{ item.sheets }}</td>
           <td>{{ item.updatedAt | itemDate | itemIsNull }}</td>
