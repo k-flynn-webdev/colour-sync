@@ -8,7 +8,7 @@ from libs import mixins, pagination
 class TimeSyncList(generics.ListCreateAPIView):
     queryset = TimeSync.objects.all()
     permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly,
+        permissions.IsAuthenticated,
     )
     serializer_class = TimeSyncSerializer
     renderer_classes = [mixins.CustomRenderer]
@@ -27,7 +27,7 @@ class TimeSyncList(generics.ListCreateAPIView):
 class TimeSyncDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = TimeSync.objects.all()
     permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly,
+        permissions.IsAuthenticated,
     )
     serializer_class = TimeSyncSerializer
     renderer_classes = [mixins.CustomRenderer]

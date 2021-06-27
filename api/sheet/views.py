@@ -8,7 +8,7 @@ from sheet.models import Sheet
 class SheetList(generics.ListCreateAPIView):
     queryset = Sheet.objects.all()
     permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly,
+        permissions.IsAuthenticated,
     )
     serializer_class = SheetSerializer
     renderer_classes = [mixins.CustomRenderer]
@@ -27,7 +27,7 @@ class SheetList(generics.ListCreateAPIView):
 class SheetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sheet.objects.all()
     permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly,
+        permissions.IsAuthenticated,
     )
     serializer_class = SheetSerializer
     renderer_classes = [mixins.CustomRenderer]

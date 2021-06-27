@@ -8,7 +8,7 @@ from project.models import Project
 class ProjectList(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly,
+        permissions.IsAuthenticated,
     )
     serializer_class = ProjectSerializer
     renderer_classes = [mixins.CustomRenderer]
@@ -26,7 +26,7 @@ class ProjectList(generics.ListCreateAPIView):
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly,
+        permissions.IsAuthenticated,
     )
     serializer_class = ProjectSerializer
     renderer_classes = [mixins.CustomRenderer]
