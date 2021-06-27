@@ -6,13 +6,16 @@ from sheet.models import Sheet
 
 
 class SheetList(generics.ListCreateAPIView):
-    queryset = Sheet.objects.all()
+    # queryset = Sheet.objects.all() - overridden with custom func
     permission_classes = (
         permissions.IsAuthenticated,
     )
     serializer_class = SheetSerializer
     renderer_classes = [mixins.CustomRenderer]
     pagination_class = pagination.LimitOffsetPagination
+
+    def get_queryset(self):
+        return Sheet.objects.filter(owner=self.request.user)
 
     def post(self, request, *args, **kwargs):
         temp_data = request.data
@@ -25,9 +28,13 @@ class SheetList(generics.ListCreateAPIView):
 
 
 class SheetDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Sheet.objects.all()
+    # queryset = Sheet.objects.all()
     permission_classes = (
         permissions.IsAuthenticated,
     )
     serializer_class = SheetSerializer
     renderer_classes = [mixins.CustomRenderer]
+
+    def get_queryset(self):
+        return Sheet.objects.filter(owner=self.request.user)
+

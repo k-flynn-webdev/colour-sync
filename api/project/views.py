@@ -6,13 +6,16 @@ from project.models import Project
 
 
 class ProjectList(generics.ListCreateAPIView):
-    queryset = Project.objects.all()
+    # queryset = Project.objects.all() - overridden with custom func
     permission_classes = (
         permissions.IsAuthenticated,
     )
     serializer_class = ProjectSerializer
     renderer_classes = [mixins.CustomRenderer]
     pagination_class = pagination.LimitOffsetPagination
+
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
 
     def post(self, request, *args, **kwargs):
         temp_data = request.data
@@ -23,11 +26,14 @@ class ProjectList(generics.ListCreateAPIView):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
+
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Project.objects.all()
+    # queryset = Project.objects.all() - overridden with custom func
     permission_classes = (
         permissions.IsAuthenticated,
     )
     serializer_class = ProjectSerializer
     renderer_classes = [mixins.CustomRenderer]
 
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
