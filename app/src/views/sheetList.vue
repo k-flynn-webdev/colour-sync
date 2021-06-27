@@ -8,10 +8,9 @@
           <th>ID</th>
           <th>Name</th>
           <th>URL</th>
-          <th>Owner</th>
           <th>Project</th>
           <th>Data</th>
-          <th>Ranking</th>
+          <th>Rank</th>
           <th>Meta</th>
           <th>Time</th>
           <th>Updated</th>
@@ -28,7 +27,6 @@
           <td>{{ item.id }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.url }}</td>
-          <td>{{ item.owner || '--' }}</td>
           <td>{{ item.project }}</td>
           <td>{{ item.data }}</td>
           <td>{{ item.ranking }}</td>
@@ -78,7 +76,7 @@ export default {
 
   computed: {
     sheets () {
-      return this.$store.state.sheet.sheets
+      return this.$store.state[SHEET.store].sheets
     }
   },
 
@@ -95,7 +93,7 @@ export default {
       if (this.isLoading) return
       this.isLoading = true
       const pageQuery = this.$route.query.page || 0
-      const promise = this.$store.dispatch("sheet/list", pageQuery)
+      const promise = this.$store.dispatch(`${SHEET.store}/list`, pageQuery)
           .catch(err => this.handleError(err))
 
       promise.finally(() => this.isLoading = false)
@@ -109,8 +107,8 @@ export default {
      */
     onItemSelect(id) {
       return this.$router.push({
-        name: 'sheet-view',
-        params: { sheet: id }
+        name: SHEET.views.view.name,
+        params: { sheetId: id }
       })
     }
   }

@@ -57,10 +57,10 @@ export default {
 
   computed: {
     itemId () {
-      return Number(this.$route.params.sheet)
+      return Number(this.$route.params.sheetId)
     },
     itemData () {
-      return this.$store.getters["sheet/getById"](this.itemId)
+      return this.$store.getters[`${SHEET.store}/getById`](this.itemId)
     },
     isValid() {
       return SHEET.isValid(this.form)
@@ -81,7 +81,7 @@ export default {
         return
       }
       vm.isLoading = true
-      return vm.$store.dispatch('sheet/get', vm.itemId)
+      return vm.$store.dispatch(`${SHEET.store}/get`, vm.itemId)
           .then(() => vm.resetForm())
           .catch(err => vm.handleError(err))
           .finally(() => vm.isLoading = false)
@@ -121,9 +121,9 @@ export default {
       }, {})
 
       const promise = this.$store.dispatch(
-          'sheet/patch', { id: this.itemId, data: patchData })
+          `${SHEET.store}/patch`, { id: this.itemId, data: patchData })
           .then(() => this.$message.add({ message: 'Sheet updated.' }))
-          .then(() => this.$router.push({ name: 'sheet-list' }))
+          .then(() => this.$router.push({ name: SHEET.views.list.name }))
           .catch(err => this.handleError(err))
 
       promise

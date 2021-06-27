@@ -11,15 +11,14 @@ export default [
     {
         path: '/project/:projectId/sheet/create',
         name: 'sheet-create',
+        props: true,
         meta: { title: 'sheet Create' },
-        props: {
-            type: 'projectId'
-        },
         component: () => import(/* webpackChunkName: "sheet-create" */ '@/views/sheetCreate')
     },
     {
-        path: '/sheet/:sheet',
+        path: '/sheet/:sheetId',
         name: 'sheet-view',
+        props: true,
         meta: { title: 'sheet' },
         component: () => import(/* webpackChunkName: "sheet-view" */ '@/views/sheetView')
     }

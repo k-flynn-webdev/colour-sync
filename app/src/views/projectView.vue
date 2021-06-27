@@ -57,10 +57,10 @@ export default {
 
   computed: {
     itemId () {
-      return Number(this.$route.params.project)
+      return Number(this.$route.params.projectId)
     },
     itemData () {
-      return this.$store.getters["project/getById"](this.itemId)
+      return this.$store.getters[`${PROJECT.store}/getById`](this.itemId)
     },
     isValid() {
       return PROJECT.isValid(this.form)
@@ -81,7 +81,7 @@ export default {
         return
       }
       vm.isLoading = true
-      return vm.$store.dispatch('project/get', vm.itemId)
+      return vm.$store.dispatch(`${PROJECT.store}/get`, vm.itemId)
           .then(() => vm.resetForm())
           .catch(err => vm.handleError(err))
           .finally(() => vm.isLoading = false)
@@ -121,9 +121,9 @@ export default {
       }, {})
 
       const promise = this.$store.dispatch(
-          'project/patch', { id: this.itemId, data: patchData })
+          `${PROJECT.store}/patch`, { id: this.itemId, data: patchData })
           .then(() => this.$message.add({ message: 'Project updated.' }))
-          .then(() => this.$router.push({ name: 'project-list' }))
+          .then(() => this.$router.push({ name: PROJECT.views.list.name }))
           .catch(err => this.handleError(err))
 
       promise

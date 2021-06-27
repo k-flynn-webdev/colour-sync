@@ -87,9 +87,9 @@ export default {
 
       this.isLoading = true
 
-      const promise = this.$store.dispatch('project/post', this.form)
+      const promise = this.$store.dispatch(`${PROJECT.store}/post`, this.form)
           .then(() => this.$message.add({ message: 'Project created.' }))
-          .then(() => this.$router.push({ name: 'project-list' }))
+          .then(() => this.$router.push({ name: PROJECT.views.list }))
           .catch(err => this.handleError(err))
 
       promise

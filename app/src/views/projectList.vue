@@ -56,7 +56,7 @@ export default {
 
   computed: {
     projects () {
-      return this.$store.state.project.projects
+      return this.$store.state[PROJECT.store].projects
     }
   },
 
@@ -73,7 +73,7 @@ export default {
       if (this.isLoading) return
       this.isLoading = true
       const pageQuery = this.$route.query.page || 0
-      const promise = this.$store.dispatch("project/list", pageQuery)
+      const promise = this.$store.dispatch(`${PROJECT.store}/list`, pageQuery)
           .catch(err => this.handleError(err))
 
       promise.finally(() => this.isLoading = false)
@@ -87,8 +87,8 @@ export default {
      */
     onItemSelect(id) {
       return this.$router.push({
-        name: 'project-view',
-        params: { project: id }
+        name: PROJECT.views.view.name,
+        params: { projectId: id }
       })
     }
   }

@@ -1,3 +1,18 @@
+/**
+ * @typedef {object}    ItemConfig    An object config to track a number of related things to an item
+ *
+ * @property {string}   value     api name
+ * @property {string}   store     store name
+ * @property {string}   route     route name
+ * @property {object}   API       api endpoints {list, get, post, patch, delete}
+ * @property {object}   views     view names and `props` required {list, view, create, update}
+ * @property {function} isValid   check if a object is valid to create the item
+ * @property {function} init      create a item
+ *
+ * @returns {Object}
+ */
+
+
 export const VARS = {
   name: process.env.APP_NAME_SHORT || 'BASE',
   pageCount: 20,
@@ -114,6 +129,7 @@ function checkProject (input) {
   return (isNameValid && isMetaValid)
 }
 
+/** @type {ItemConfig} Project */
 export const PROJECT = {
   value: 'project',
   store: 'project',
@@ -124,9 +140,13 @@ export const PROJECT = {
     PATCH: '/api/project',
     DELETE: '/api/project',
   },
-  route: { name: 'project', href: '/project' },
+  views: {
+    list: { name: 'project-list' },
+    view: { name: 'project-view', props: ['projectId'] },
+    create: { name: 'project-create' },
+  },
   isValid: checkProject,
-  init: projectDefaultObj
+  init: createProjectObj
 }
 
 /**
@@ -143,11 +163,11 @@ export const PROJECT = {
  */
 
 /**
- * Creates a default Project Obj
+ * Creates a Project Obj
  *
  * @return {Project} ProjectObj
  */
-function projectDefaultObj () {
+function createProjectObj () {
   return {
     id: -1,
     name: '',
@@ -176,6 +196,7 @@ function checkSheet (input) {
   return (isNameValid && isMetaValid && isDataValid && isRankingValid && isURLValid)
 }
 
+/** @type {ItemConfig} Sheet */
 export const SHEET = {
   value: 'sheet',
   store: 'sheet',
@@ -186,9 +207,13 @@ export const SHEET = {
     PATCH: '/api/sheet',
     DELETE: '/api/sheet',
   },
-  route: { name: 'sheet', href: '/sheet' },
+  views: {
+    list: { name: 'sheet-list', props: ['projectId'] },
+    view: { name: 'sheet-view', props: ['sheetId'] },
+    create: { name: 'sheet-create', props: ['projectId'] },
+  },
   isValid: checkSheet,
-  init: sheetDefaultObj
+  init: createSheetObj
 }
 
 /**
@@ -209,12 +234,12 @@ export const SHEET = {
  */
 
 /**
- * Creates a default Sheet Obj
+ * Creates a Sheet Obj
  *
  * @params {number} Project
  * @return {Sheet}  SheetObj
  */
-function sheetDefaultObj (project = -1) {
+function createSheetObj (project = -1) {
   return {
     id: -1,
     name: '',
@@ -237,7 +262,7 @@ function sheetDefaultObj (project = -1) {
  * @returns {boolean}
  */
 function checkTimeSync (input) {
-  // todo
+  // TODO
   if (!input) return false
   const isNameValid = (input.name && input.name.length >= 5)
   const isMetaValid = (input.meta ? input.meta.length >= 5 : true)
@@ -247,19 +272,24 @@ function checkTimeSync (input) {
   return (isNameValid && isMetaValid && isDataValid && isRankingValid && isURLValid)
 }
 
+/** @type {ItemConfig} TimeSync */
 export const TIMESYNC = {
-  value: 'timesync',
-  store: 'timesync',
+  value: 'time',
+  store: 'time',
   API: {
-    LIST: '/api/timesync/',
-    GET: '/api/timesync/',
-    POST: '/api/timesync/',
-    PATCH: '/api/timesync',
-    DELETE: '/api/timesync',
+    LIST: '/api/time/',
+    GET: '/api/time/',
+    POST: '/api/time/',
+    PATCH: '/api/time',
+    DELETE: '/api/time',
   },
-  route: { name: 'timesync', href: '/timesync' },
+  views: {
+    list: { name: 'time-list', props: ['sheetId'] },
+    view: { name: 'time-view', props: ['timeId'] },
+    create: { name: 'time-create', props: ['sheetId'] },
+  },
   isValid: checkTimeSync,
-  init: timeSyncDefaultObj
+  init: createTimeSyncObj
 }
 
 /**
@@ -270,20 +300,20 @@ export const TIMESYNC = {
  * @property {number}   sheet
  * @property {string}   meta
  * @property {date}     timeStart
- * @property {number}   timeDuration    In days
- * @property {string}   repeatType      Enum (None:NO,Day:DY,Week:WK,Month:MH,Year:YR)
- * @property {number}   repeatVal       In days
+ * @property {number}   timeDuration    In days, default is 7 days
+ * @property {string}   repeatType      Enum Opts: (None:NO,Day:DY,Week:WK,Month:MH,Year:YR), default is NO
+ * @property {number}   repeatVal       In days, default is 0
  * @property {date}     createdAt
  * @property {date}     updatedAt
  */
 
 /**
- * Creates a default TimeSync Obj
+ * Creates a TimeSync Obj
  *
  * @params {number}     Sheet
  * @return {TimeSync}   TimeSyncObj
  */
-function timeSyncDefaultObj (sheet = -1) {
+function createTimeSyncObj (sheet = -1) {
   return {
     id: -1,
     owner: undefined,
@@ -305,5 +335,6 @@ export const ALL = {
   LOGOUT,
   REGISTER,
   PROJECT,
-  SHEET
+  SHEET,
+  TIMESYNC,
 }
