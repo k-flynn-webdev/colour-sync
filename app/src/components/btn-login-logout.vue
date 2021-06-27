@@ -36,8 +36,8 @@ export default {
 
   data () {
     return {
-      url_login: LOGIN.route,
-      url_logout: LOGOUT.route,
+      url_login: LOGIN.views,
+      url_logout: LOGOUT.views,
     }
   },
 

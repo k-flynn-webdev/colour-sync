@@ -62,39 +62,19 @@ function checkPassword (input) {
   return (input && input.length >= 8)
 }
 
-export const REGISTER = {
-  value: 'signup',
-  route: { name: 'signup', href: '/accounts/signup' },
-  API: {
-    GET: '/accounts/signup',
-    POST: '/accounts/signup'
-  },
-  isValid: (input) => {
-    return (input &&
-        input.email &&
-        input.password &&
-        checkEmail(input.email) &&
-        checkPassword(input.password))
-  }
-}
-
 export const LOGIN = {
   value: 'login',
-  route: { name: 'login', href: '/accounts/login/' },
-  API: {
-    GET: '/accounts/login',
-    POST: '/accounts/login'
-  },
-  isValid: REGISTER.isValid
+  views: { href: '/accounts/login/' },
+}
+
+export const REGISTER = {
+  value: 'signup',
+  views: { href: '/accounts/signup' },
 }
 
 export const LOGOUT = {
   value: 'logout',
-  route: { name: 'logout', href: '/accounts/logout/' },
-  API: {
-    GET: '/accounts/logout',
-    POST: '/accounts/logout'
-  }
+  views: { href: '/accounts/logout/' },
 }
 
 /**
@@ -111,8 +91,7 @@ export const USER = {
 
 export const ADMIN = {
   value: 'admin',
-  store: 'admin',
-  route: { name: 'admin', href: '/accounts/admin/' },
+  views: { href: '/accounts/admin/' },
 }
 
 

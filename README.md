@@ -76,3 +76,10 @@ time
     With the user only being able to choose between each type not a combo!
         * all repeat times will be started from the day eg after midnight 00:01 am) 
 
+TODO:
+    - discount codes?
+    - alpha/beta etc property
+    - auto copy+paste for lazy people on the style sheet creation page
+    - test page/view button ...?
+    - better strap line than `cron jobs for styles`
+    - 
