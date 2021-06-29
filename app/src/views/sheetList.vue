@@ -32,11 +32,12 @@
           <td>{{ item.ranking }}</td>
           <td>{{ item.meta }}</td>
           <td>
-            <template v-if="item.time_sync_data">
+            <template v-if="item.time_sync_data.length">
               <time-sync
                 v-for="(time, idx) in item.time_sync_data"
                 :key="time.id || idx"
                 :time-sync="time"
+                short
               />
             </template>
             <template v-else>--</template>

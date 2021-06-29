@@ -63,10 +63,11 @@ url
 
 time
     - sheet (see `sheet.time` from above)
-    - time (date + time)
-    - time (duration (hours/days/weeks/months))
+    - date (date + time) 
+    - durationType (enum)
+    - durationVal (int) (in # (active/hours/days/weeks/months))
     - repeatType (enum)
-    - repeatVal (int) (in # days)
+    - repeatVal (int) (in # (hours/hours/days/weeks/months))
     (repeatType should be based on the year kinda, eg:
         * repeat `NONE` - default,
         * repeat `DAY` of the month (x of 31),

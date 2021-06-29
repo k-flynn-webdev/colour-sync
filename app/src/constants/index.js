@@ -278,10 +278,9 @@ export const TIMESYNC = {
  * @property {number}   [owner]
  * @property {number}   sheet
  * @property {string}   meta
- * @property {date}     timeStart
- * @property {number}   timeDuration    In days, default is 7 days
- * @property {string}   repeatType      Enum Opts: (None:NO,Day:DY,Week:WK,Month:MH,Year:YR), default is NO
- * @property {number}   repeatVal       In days, default is 0
+ * @property {date}     date            Date becomes active (1st occurrence)
+ * @property {number}   durationVal     In days, default is 7 days
+ * @property {string}   durationType    Enum Opts: (None:NO,Day:DY,Week:WK,Month:MH,Year:YR), default is ON
  * @property {date}     createdAt
  * @property {date}     updatedAt
  */
@@ -298,10 +297,9 @@ function createTimeSyncObj (sheet = -1) {
     owner: undefined,
     meta: '',
     sheet: sheet,
-    timeStart: new Date(),
-    timeDuration: 7,
-    repeatType: 'NO',
-    repeatVal: 0,
+    date: new Date(),
+    durationType: 'ON',
+    durationVal: 7,
     createdAt: null,
     updatedAt: null,
   }

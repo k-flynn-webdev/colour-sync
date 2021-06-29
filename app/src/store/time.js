@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { SHEET } from '@/constants';
+import { TIMESYNC } from '@/constants';
 import HTTP from '@/services/HttpService'
 
 
@@ -10,52 +10,52 @@ import HTTP from '@/services/HttpService'
  */
 function initState () {
   return {
-    sheets: []
+    timesync: []
   }
 }
 
 const getters = {
   /**
-   * Gets a Sheet from state via ID
+   * Gets a TimeSync from state via ID
    *
    * @param {object}  state
    * @param {number}  id
-   * @returns {sheet|void}
+   * @returns {TimeSync|void}
    */
   getById: (state) => (id) => {
-    return state.sheets.find(item => item.id === id)
+    return state.timesync.find(item => item.id === id)
   }
 }
 
 const mutations = {
   /**
-   * Sets the Sheet state
+   * Sets the TimeSync state
    *
-   * @param {object}    state
-   * @param {Sheet[]}   input
+   * @param {object}      state
+   * @param {TimeSync[]}  input
    */
   set: function (state, input) {
-    Vue.set(state, 'sheets', input)
+    Vue.set(state, 'timesync', input)
   },
   /**
-   * Add a Sheet
-   *
-   * @param {object}  state
-   * @param {Sheet}   data    sheet data
-   */
-  post: function (state, data) {
-    state.sheets.push(data)
-  },
-  /**
-   * Patch a Sheet
+   * Add a TimeSync
    *
    * @param {object}    state
-   * @param {Sheet}     data          sheet data
+   * @param {TimeSync}  data    timesync data
+   */
+  post: function (state, data) {
+    state.timesync.push(data)
+  },
+  /**
+   * Patch a TimeSync
+   *
+   * @param {object}    state
+   * @param {TimeSync}  data          timesync data
    * @param {Boolean}   addIfMissing  Add to state if not found
    */
   patch: function (state, data, addIfMissing=true) {
     let updated = false
-    state.sheets.forEach(item => {
+    state.timesync.forEach(item => {
       if (item.id === data.id) {
         item = data
         updated = true
@@ -64,87 +64,87 @@ const mutations = {
 
     if (!updated && !addIfMissing) return
 
-    state.sheets.push(data)
+    state.timesync.push(data)
   },
   /**
-   * Remove a Sheet
+   * Remove a TimeSync
    *
    * @param {object}  state
    * @param {number}  id
    */
   remove: function (state, id) {
-    let count = state.sheets.findIndex(item => item.id === id)
+    let count = state.timesync.findIndex(item => item.id === id)
     if (count < 0) return
-    state.sheets.splice(count, 1)
+    state.timesync.splice(count, 1)
   }
 }
 const actions = {
   /**
-   * List Sheets via API
+   * List TimeSync items via API
    *
    * @param {object}  context
    * @param {object}  pageQuery
    * @return {Promise}
    */
   list: function (context, pageQuery) {
-    return HTTP.get(SHEET.API.GET, pageQuery)
+    return HTTP.get(TIMESYNC.API.GET, pageQuery)
     .then(({ data }) => {
       context.commit('set', data.data)
       return data.data
     })
   },
   /**
-   * Get Sheet details via API
+   * Get TimeSync details via API
    *
    * @param {object}  context
    * @param {number}  id
    * @return {Promise}
    */
   get: function (context, id) {
-    return HTTP.get(`${SHEET.API.GET}/${id}/`)
+    return HTTP.get(`${TIMESYNC.API.GET}/${id}/`)
     .then(({ data }) => {
       context.commit('patch', data.data)
       return data.data
     })
   },
   /**
-   * Post Sheet details via API
+   * Post TimeSync details via API
    *
-   * @param {object}  context
-   * @param {Sheet}  data
+   * @param {object}    context
+   * @param {TimeSync}  data
    * @return {Promise}
    */
   post: function (context, data) {
-    return HTTP.post(`${SHEET.API.POST}/`, data)
+    return HTTP.post(`${TIMESYNC.API.POST}/`, data)
     .then(({ data }) => {
       context.commit('post', data.data)
       return data.data
     })
   },
   /**
-   * Patch Sheet details via API
+   * Patch TimeSync details via API
    *
    * @param {object}    context
    * @param {Number}    id
-   * @param {Sheet}     data
+   * @param {TimeSync}  data
    * @return {Promise}
    */
   patch: function (context, {id, data}) {
-    return HTTP.patch(`${SHEET.API.PATCH}/${id}/`, data)
+    return HTTP.patch(`${TIMESYNC.API.PATCH}/${id}/`, data)
     .then(({ data }) => {
       context.commit('patch', data.data)
       return data.data
     })
   },
   /**
-   * Delete Sheet via API
+   * Delete TimeSync via API
    *
    * @param {object}  context
    * @param {number}  id
    * @return {Promise}
    */
   remove: function (context, id) {
-    return HTTP.remove(`${SHEET.API.DELETE}/${id}/`)
+    return HTTP.remove(`${TIMESYNC.API.DELETE}/${id}/`)
     .then(({ data }) => {
       context.commit('remove', id)
       return data.data

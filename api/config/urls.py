@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/whoami/', include('user.urls')),
     path('api/project/', include('project.urls')),
     path('api/sheet/', include('sheet.urls')),
-    path('api/timesync/', include('timeSync.urls')),
+    path('api/time/', include('timeSync.urls')),
 ]
               # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # if settings.DEBUG:
