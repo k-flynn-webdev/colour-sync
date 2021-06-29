@@ -304,6 +304,26 @@ function createTimeSyncObj (sheet = -1) {
     updatedAt: null,
   }
 }
+
+export const DURATION_CHOICES = {
+  ON: 'Active',
+  DY: 'Day',
+  WK: 'Week',
+  MH: 'Month',
+  YR: 'Year',
+}
+export const REPEAT_CHOICES = {
+  NO: 'None',
+  DY: 'Day',
+  WK: 'Week',
+  MH: 'Month',
+  YR: 'Year',
+}
+
+
+
+
+
 export const ALL = {
   VARS,
   CSRF,

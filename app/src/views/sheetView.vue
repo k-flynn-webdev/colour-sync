@@ -21,7 +21,7 @@
           <div class="control">
             <time-sync
                 class="control"
-                v-for="(time, idx) in item.time_sync_data"
+                v-for="(time, idx) in item"
                 :key="time.id || idx"
                 :time-sync="time"
                 update
@@ -96,9 +96,21 @@ export default {
     },
     hasChanges () {
       if (!this.itemData) return false
-      const source = Object.values(this.itemData).toString()
-      const form = Object.values(this.form).toString()
-      return source !== form
+
+      let form = []
+      let source = []
+      Object.keys(this.itemData).forEach(item => {
+        if (item !== 'time_sync_data') {
+          source.push(this.itemData[item])
+        }
+      })
+      Object.keys(this.form).forEach(item => {
+        if (item !== 'time_sync_data') {
+          form.push(this.form[item])
+        }
+      })
+
+      return form.toString() !== source.toString()
     }
   },
 
@@ -175,6 +187,7 @@ export default {
             sheetUpdate.time_sync_data.push(data)
             this.$store.commit(`${SHEET.store}/patch`, sheetUpdate)
           })
+          .catch(err => this.handleError(err))
     }
   }
 }
