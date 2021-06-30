@@ -297,7 +297,7 @@ function createTimeSyncObj (sheet = -1) {
     owner: undefined,
     meta: '',
     sheet: sheet,
-    date: new Date(),
+    date: new Date().toISOString().split('T')[0],
     durationType: 'ON',
     durationVal: 7,
     createdAt: null,

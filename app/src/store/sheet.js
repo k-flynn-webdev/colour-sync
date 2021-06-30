@@ -55,12 +55,13 @@ const mutations = {
    */
   patch: function (state, data, addIfMissing=true) {
     let updated = false
-    state.sheets.forEach(item => {
-      if (item.id === data.id) {
-        item = data
+
+    for(let i= 0, max= state.sheets.length; i < max; i++) {
+      if (state.sheets[i].id === data.id) {
+        Vue.set(state.sheets, i, data)
         updated = true
       }
-    })
+    }
 
     if (!updated && !addIfMissing) return
 

@@ -1,7 +1,6 @@
 <template>
   <div class="column is-7-tablet is-6-desktop is-4-widescreen sheet">
-    <form class="box"
-          @submit.prevent="onSubmit">
+    <form class="box">
 
       <div v-for="(item, key) in itemData"
            :key="key"
@@ -25,6 +24,7 @@
                 :key="time.id || idx"
                 :time-sync="time"
                 update
+                @update:time="onUpdateSheet"
             />
           </div>
         </template>
@@ -35,12 +35,14 @@
           >
             {{ key }}
           </label>
-          <div class="control">
+          <div class="control"
+               :class="{ 'is-loading': isLoading[key] }">
             <input :id="getUniqueId(key)"
-                   v-model="form[key]"
+                   :value="form[key]"
+                   :placeholder="item"
                    class="input"
                    type="text"
-                   :placeholder="item"
+                   @change="onUpdateSheet($event.target.value, key)"
             >
           </div>
         </template>
@@ -52,7 +54,7 @@
             class="button is-success"
             :disabled="!hasChanges || !isValid"
         >
-          {{ isLoading ? '...' : 'Update' }}
+          Update
         </button>
       </div>
 
@@ -79,7 +81,13 @@ export default {
 
   data () {
     return {
-      isLoading: false,
+      isLoading: {
+        name: false,
+        url: false,
+        meta: false,
+        data: false,
+        ranking: false,
+      },
       form: {}
     }
   },
@@ -121,11 +129,10 @@ export default {
         vm.resetForm()
         return
       }
-      vm.isLoading = true
+
       return vm.$store.dispatch(`${SHEET.store}/get`, vm.itemId)
-          .then(() => vm.resetForm())
+          .then(() => vm.onResetForm())
           .catch(err => vm.handleError(err))
-          .finally(() => vm.isLoading = false)
     })
   },
 
@@ -139,54 +146,56 @@ export default {
     getUniqueId (input) {
       return 'id-' + input
     },
-    /** Reset form */
-    resetForm () {
+    /** Reset form data */
+    onResetForm () {
       this.form = Object.assign({}, this.itemData)
     },
     /**
-     * Submit Sheet details to API
+     * Update a Sheet with patch data
+     *
+     * @param {string|number|date}  input
+     * @param {string}              type
+     * @returns {Promise<boolean>|void}
+     */
+    onUpdateSheet (input, type) {
+      if (this.isLoading[type]) return
+      this.isLoading[type] = true
+
+      return this.$store.dispatch(`${SHEET.store}/patch`, {
+        id: this.itemId, data: { id: this.itemId, [type]: input }
+      })
+          .then((data) => this.form = data)
+          .then(() => this.$message.add({
+            message: 'Sheet updated.', timeDisplay: 3
+          }))
+          .catch(err => this.handleError(err))
+          .finally(() => this.isLoading[type] = false)
+    },
+    /**
+     * Get latest version of Sheet via API
      *
      * @returns {void|Promise<boolean>}
      */
-    onSubmit () {
+    onUpdate() {
       if (this.isLoading) return
-      if (!this.hasChanges) return
-      if (!SHEET.isValid(this.form)) return
-
       this.isLoading = true
-
-      const patchData = Object.keys(this.itemData).reduce((acc, current) => {
-        if (this.itemData[current] === this.form[current]) return acc
-        acc[current] = this.form[current]
-        return acc
-      }, {})
-
-      const promise = this.$store.dispatch(
-          `${SHEET.store}/patch`, { id: this.itemId, data: patchData })
-          .then(() => this.$message.add({ message: 'Sheet updated.' }))
-          .then(() => this.$router.push({ name: SHEET.views.list.name }))
+      return this.$store.dispatch(`${SHEET.store}/get`,
+          this.itemId)
+          .then((data) => this.form = data)
           .catch(err => this.handleError(err))
-
-      promise
           .finally(() => this.isLoading = false)
-
-      return promise
     },
     /**
      * Add a new TimeSync via API
      *
      * @returns {void|Promise<boolean>}
      */
-    onAddTimeSync () {
-      const newTimeSync = TIMESYNC.init(this.itemId)
+    onAddTimeSync() {
+      if (this.isLoading) return
 
-      return this.$store.dispatch(`${TIMESYNC.store}/post`,
-          newTimeSync)
-          .then((data) => {
-            const sheetUpdate = Object.assign({}, this.itemData)
-            sheetUpdate.time_sync_data.push(data)
-            this.$store.commit(`${SHEET.store}/patch`, sheetUpdate)
-          })
+      const newTimeSync = TIMESYNC.init(this.itemId)
+      return this.$store.dispatch(`${TIMESYNC.store}/post`, newTimeSync)
+          .then(() => this.onUpdate())
           .catch(err => this.handleError(err))
     }
   }

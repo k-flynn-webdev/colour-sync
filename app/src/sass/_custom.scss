@@ -12,6 +12,12 @@ html {
     border-radius: 0.33rem;
   }
 
+  .control.is-loading::after {
+    border: 2px solid $background;
+    border-right-color: transparent;
+    border-top-color: transparent;
+  }
+
   .email { font-size: 0.9rem; }
 
   .close {

@@ -27,7 +27,7 @@ class TimeSync(models.Model):
     """ Sheet this Time model affects """
     meta = models.CharField(max_length=255, blank=True, null=True)
     """ Meta information for this Time model """
-    date = models.DateTimeField()
+    date = models.DateField()
     """ Time this model becomes active """
     durationType = models.CharField(
         max_length=2,

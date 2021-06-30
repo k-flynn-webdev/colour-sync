@@ -9,19 +9,23 @@
       <span class="duration-val">{{ timeSync.durationVal }}</span>
     </div>
 
-    <form v-if="update" class="mb-7 p-1 has-border-background has-border-radius">
+    <form v-if="update"
+          class="mb-4 p-1 has-border-background has-border-radius">
       <div class="field is-horizontal">
         <div class="field-label is-normal">
           <label class="label">ID {{ timeSync.id }}</label>
         </div>
         <div class="field-body">
           <div class="field">
-            <p class="control">
+            <p class="control"
+               :class="{ 'is-loading': isLoading.meta }">
               <input
-                  v-model="timeSync.meta"
+                  :value="meta"
                   class="input"
                   type="text"
-                  placeholder="Meta">
+                  placeholder="Meta"
+                  @change="patchTimeSync($event.target.value, 'meta')"
+              >
             </p>
           </div>
         </div>
@@ -32,9 +36,10 @@
         </div>
         <div class="field-body">
           <div class="field">
-            <p class="control is-expanded">
+            <p class="control is-expanded"
+               :class="{ 'is-loading': isLoading.date }">
               <input
-                  v-model="timeSync.date"
+                  v-model="date"
                   class="input"
                   type="date"
                   placeholder="Choose a date">
@@ -49,9 +54,10 @@
         <div class="field-body">
 
           <div class="field has-addons">
-            <div class="control">
+            <div class="control"
+                 :class="{ 'is-loading': isLoading.duration }">
               <div class="select">
-                <select v-model="timeSync.durationType">
+                <select v-model="durationType">
                   <option
                       v-for="(option, key) in optionsDuration"
                       :key="key"
@@ -61,9 +67,10 @@
                 </select>
               </div>
             </div>
-            <p class="control is-expanded">
+            <p class="control is-expanded"
+               :class="{ 'is-loading': isLoading.duration }">
               <input
-                  v-model="timeSync.durationVal"
+                  v-model="durationVal"
                   class="input"
                   type="number"
                   step="1"
@@ -81,7 +88,7 @@
 </template>
 
 <script>
-import { TIMESYNC, REPEAT_CHOICES, DURATION_CHOICES } from '@/constants'
+import {TIMESYNC, REPEAT_CHOICES, DURATION_CHOICES, SHEET} from '@/constants'
 import crossIcon from '@/assets/cross'
 import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
@@ -117,15 +124,54 @@ export default {
 
   data () {
     return {
+      isLoading: {
+        meta: false,
+        date: false,
+        durationType: false,
+        durationVal: false,
+      }
     }
   },
 
   computed: {
+    optionsRepeat () { return REPEAT_CHOICES },
     optionsDuration () { return DURATION_CHOICES },
-    optionsRepeat () { return REPEAT_CHOICES }
+    meta: {
+      get () { return this.timeSync.meta },
+    },
+    date: {
+      get () { return this.timeSync.date },
+      set (input) { return this.patchTimeSync(input, 'date') }
+    },
+    durationType: {
+      get () { return this.timeSync.durationType },
+      set (input) { return this.patchTimeSync(input, 'durationType') }
+    },
+    durationVal: {
+      get () { return this.timeSync.durationVal },
+      set (input) { return this.patchTimeSync(input, 'durationVal') }
+    },
   },
 
   methods: {
+    /**
+     * Update a TimeSync with patch data
+     *
+     * @param {string|number|date}  input
+     * @param {string}              type
+     * @returns {Promise<boolean>|void}
+     */
+    patchTimeSync (input, type) {
+      if (this.isLoading[type]) return
+      this.isLoading[type] = true
+
+      return this.$store.dispatch(`${TIMESYNC.store}/patch`, {
+        id: this.timeSync.id, data: { id: this.timeSync.id, [type]: input }
+      })
+          .then(() => this.$emit('update:time'))
+          .catch(err => this.handleError(err))
+          .finally(() => this.isLoading[type] = false)
+    }
   }
 }
 </script>
