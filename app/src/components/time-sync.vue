@@ -9,7 +9,7 @@
       <span class="duration-val">{{ timeSync.durationVal }}</span>
     </div>
 
-    <form v-if="update" class="mb-7 p-1 has-border-black has-border-radius">
+    <form v-if="update" class="mb-7 p-1 has-border-background has-border-radius">
       <div class="field is-horizontal">
         <div class="field-label is-normal">
           <label class="label">ID {{ timeSync.id }}</label>
