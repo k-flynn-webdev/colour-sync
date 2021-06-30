@@ -13,23 +13,16 @@
         >
           {{ key }}
         </label>
-        <div class="control">
+        <div class="control"
+             :class="{ 'is-loading': isLoading[key] }">
           <input :id="getUniqueId(key)"
-                 v-model="form[key]"
+                 :value="form[key]"
+                 :placeholder="item"
                  class="input"
                  type="text"
-                 :placeholder="item"
+                 @change="onUpdateProject($event.target.value, key)"
           >
         </div>
-      </div>
-
-      <div class="field mt-5">
-        <button
-            class="button is-success"
-            :disabled="!hasChanges || !isValid"
-        >
-          {{ isLoading ? '...' : 'Update' }}
-        </button>
       </div>
 
     </form>
@@ -50,7 +43,10 @@ export default {
 
   data () {
     return {
-      isLoading: false,
+      isLoading: {
+        name: false,
+        meta: false,
+      },
       form: {}
     }
   },
@@ -77,14 +73,13 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (vm.itemData) {
-        vm.resetForm()
+        vm.onResetForm()
         return
       }
-      vm.isLoading = true
+
       return vm.$store.dispatch(`${PROJECT.store}/get`, vm.itemId)
-          .then(() => vm.resetForm())
+          .then(() => vm.onResetForm())
           .catch(err => vm.handleError(err))
-          .finally(() => vm.isLoading = false)
     })
   },
 
@@ -99,38 +94,41 @@ export default {
       return 'id-' + input
     },
     /** Reset form */
-    resetForm () {
+    onResetForm () {
       this.form = Object.assign({}, this.itemData)
     },
     /**
-     * Submit Project details to API
+     * Update a Project with patch data
+     *
+     * @param {string|number|date}  input
+     * @param {string}              type
+     * @returns {Promise<boolean>|void}
+     */
+    onUpdateProject (input, type) {
+      if (this.isLoading[type]) return
+      this.isLoading[type] = true
+
+      return this.$store.dispatch(`${PROJECT.store}/patch`, {
+        id: this.itemId, data: { id: this.itemId, [type]: input }
+      })
+          .then((data) => this.form = data)
+          .then(() => this.$message.add({
+            message: 'Project updated.', timeDisplay: 3
+          }))
+          .catch(err => this.handleError(err))
+          .finally(() => this.isLoading[type] = false)
+    },
+    /**
+     * Get latest version of Sheet via API
      *
      * @returns {void|Promise<boolean>}
      */
-    onSubmit () {
-      if (this.isLoading) return
-      if (!this.hasChanges) return
-      if (!PROJECT.isValid(this.form)) return
-
-      this.isLoading = true
-
-      const patchData = Object.keys(this.itemData).reduce((acc, current) => {
-        if (this.itemData[current] === this.form[current]) return acc
-        acc[current] = this.form[current]
-        return acc
-      }, {})
-
-      const promise = this.$store.dispatch(
-          `${PROJECT.store}/patch`, { id: this.itemId, data: patchData })
-          .then(() => this.$message.add({ message: 'Project updated.' }))
-          .then(() => this.$router.push({ name: PROJECT.views.list.name }))
+    onUpdate() {
+      return this.$store.dispatch(`${PROJECT.store}/get`,
+          this.itemId)
+          .then((data) => this.form = data)
           .catch(err => this.handleError(err))
-
-      promise
-          .finally(() => this.isLoading = false)
-
-      return promise
-    }
+    },
   }
 }
 </script>

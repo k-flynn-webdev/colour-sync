@@ -49,15 +49,6 @@
 
       </div>
 
-      <div class="field mt-5">
-        <button
-            class="button is-success"
-            :disabled="!hasChanges || !isValid"
-        >
-          Update
-        </button>
-      </div>
-
     </form>
   </div>
 

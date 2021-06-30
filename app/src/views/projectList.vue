@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-7-tablet1 is-6-desktop1 is-4-widescreen1 project">
+  <div class="column is-7-tablet1 is-6-desktop1 is-4-widescreen1 project overflow-auto">
 
     <div class="table-container">
       <progress v-if="isLoading" class="progress is-large is-info" max="100">60%</progress>
