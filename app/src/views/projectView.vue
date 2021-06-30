@@ -119,7 +119,7 @@ export default {
           .finally(() => this.isLoading[type] = false)
     },
     /**
-     * Get latest version of Sheet via API
+     * Get latest version of Project via API
      *
      * @returns {void|Promise<boolean>}
      */
@@ -128,7 +128,7 @@ export default {
           this.itemId)
           .then((data) => this.form = data)
           .catch(err => this.handleError(err))
-    },
+    }
   }
 }
 </script>

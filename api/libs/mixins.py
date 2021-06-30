@@ -17,6 +17,7 @@ class CustomRenderer(JSONRenderer):
         temp_data = None
         temp_detail = None
         temp_pagination = None
+        is_success = str(status_code).startswith('2') or str(status_code).startswith('3')
 
         # split data into pagination parts
         try:
@@ -30,8 +31,12 @@ class CustomRenderer(JSONRenderer):
             temp_pagination = None
             temp_data = data
 
-        if data.get('detail'):
-            temp_detail = data.get('detail')
+        if is_success:
+            try:
+                temp_detail = data.get('detail')
+            except:
+                temp_data = data
+
 
         data_to_render = create_response(temp_data, status_code, temp_detail)
 

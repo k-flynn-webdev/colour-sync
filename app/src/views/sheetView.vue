@@ -24,6 +24,7 @@
                 :key="time.id || idx"
                 :time-sync="time"
                 update
+                remove
                 @update:time="onUpdateSheet"
             />
           </div>
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-import { SHEET, TIMESYNC } from '@/constants'
+import {PROJECT, SHEET, TIMESYNC} from '@/constants'
 import timeSync from '@/components/time-sync'
 import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
@@ -183,7 +184,7 @@ export default {
       return this.$store.dispatch(`${TIMESYNC.store}/post`, newTimeSync)
           .then(() => this.onUpdate())
           .catch(err => this.handleError(err))
-    }
+    },
   }
 }
 </script>

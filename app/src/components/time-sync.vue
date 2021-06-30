@@ -82,13 +82,18 @@
 
         </div>
       </div>
+      <div v-if="remove"
+           class="tag is-link has-background-danger has-fill-white"
+           @click="onDeleteTimeSync">
+        <cross-icon />
+      </div>
     </form>
 
   </div>
 </template>
 
 <script>
-import {TIMESYNC, REPEAT_CHOICES, DURATION_CHOICES, SHEET} from '@/constants'
+import { TIMESYNC, REPEAT_CHOICES, DURATION_CHOICES } from '@/constants'
 import crossIcon from '@/assets/cross'
 import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
@@ -111,6 +116,12 @@ export default {
     },
     /** @type {Boolean} Allow TimeSync to be updated */
     update: {
+      required: false,
+      default: false,
+      type: Boolean
+    },
+    /** @type {Boolean} Allow TimeSync to be removed */
+    remove: {
       required: false,
       default: false,
       type: Boolean
@@ -171,7 +182,18 @@ export default {
           .then(() => this.$emit('update:time'))
           .catch(err => this.handleError(err))
           .finally(() => this.isLoading[type] = false)
-    }
+    },
+    /**
+     * Delete TimeSync via API
+     *
+     * @returns {void|Promise<boolean>}
+     */
+    onDeleteTimeSync() {
+      return this.$store.dispatch(`${TIMESYNC.store}/remove`,
+          this.timeSync.id)
+          .then(() => this.$emit('update:time'))
+          .catch(err => this.handleError(err))
+    },
   }
 }
 </script>
