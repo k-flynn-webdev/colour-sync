@@ -8,6 +8,10 @@ html {
   color: $color-text;
   min-height: 40rem;
 
+  .has-border-radius {
+    border-radius: 0.33rem;
+  }
+
   .email { font-size: 0.9rem; }
 
   .close {

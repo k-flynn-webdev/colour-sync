@@ -65,9 +65,9 @@ time
     - sheet (see `sheet.time` from above)
     - date (date + time) 
     - durationType (enum)
-    - durationVal (int) (in # (active/hours/days/weeks/months))
+    - durationVal (int) (in # (active/days/weeks/months))
     - repeatType (enum)
-    - repeatVal (int) (in # (hours/hours/days/weeks/months))
+    - repeatVal (int) (in # (days/weeks/months))
     (repeatType should be based on the year kinda, eg:
         * repeat `NONE` - default,
         * repeat `DAY` of the month (x of 31),

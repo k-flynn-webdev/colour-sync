@@ -9,13 +9,12 @@
       <span class="duration-val">{{ timeSync.durationVal }}</span>
     </div>
 
-    <form v-if="update" class="span-comma">
+    <form v-if="update" class="mb-7 p-1 has-border-black has-border-radius">
       <div class="field is-horizontal">
         <div class="field-label is-normal">
-          <label class="label">ID[{{ timeSync.id }}]</label>
+          <label class="label">ID {{ timeSync.id }}</label>
         </div>
         <div class="field-body">
-
           <div class="field">
             <p class="control">
               <input
@@ -25,6 +24,29 @@
                   placeholder="Meta">
             </p>
           </div>
+        </div>
+      </div>
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label">Date</label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <p class="control is-expanded">
+              <input
+                  v-model="timeSync.date"
+                  class="input"
+                  type="date"
+                  placeholder="Choose a date">
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label">Duration</label>
+        </div>
+        <div class="field-body">
 
           <div class="field has-addons">
             <div class="control">
@@ -52,22 +74,7 @@
           </div>
 
         </div>
-
-        <div class="field">
-          <label class="control">
-            Date
-            <input
-                v-model="timeSync.date"
-                class="input"
-                type="datetime-local"
-            >
-          </label>
-        </div>
-
       </div>
-
-      <span class="created-at">{{ timeSync.createdAt | itemDate }}</span>
-      <span class="updated-at">{{ timeSync.updatedAt | itemDate }}</span>
     </form>
 
   </div>
