@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import get_user_model as user_model
 from django.db import models
 from sheet.models import Sheet
@@ -48,7 +50,7 @@ class TimeSync(models.Model):
     """ Repeat value, in days """
     createdAt = models.DateTimeField(auto_now_add=True)
     """ Time model was created """
-    updatedAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
     """ Time model was updated """
 
     class Meta:

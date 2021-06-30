@@ -126,7 +126,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (vm.itemData) {
-        vm.resetForm()
+        vm.onResetForm()
         return
       }
 
@@ -177,13 +177,10 @@ export default {
      * @returns {void|Promise<boolean>}
      */
     onUpdate() {
-      if (this.isLoading) return
-      this.isLoading = true
       return this.$store.dispatch(`${SHEET.store}/get`,
           this.itemId)
           .then((data) => this.form = data)
           .catch(err => this.handleError(err))
-          .finally(() => this.isLoading = false)
     },
     /**
      * Add a new TimeSync via API
@@ -191,8 +188,6 @@ export default {
      * @returns {void|Promise<boolean>}
      */
     onAddTimeSync() {
-      if (this.isLoading) return
-
       const newTimeSync = TIMESYNC.init(this.itemId)
       return this.$store.dispatch(`${TIMESYNC.store}/post`, newTimeSync)
           .then(() => this.onUpdate())

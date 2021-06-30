@@ -32,7 +32,7 @@ class Sheet(models.Model):
 
     createdAt = models.DateTimeField(auto_now_add=True)
     """ Sheet model was created """
-    updatedAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
     """ Sheet model was updated """
     deletedAt = models.DateTimeField(blank=True, null=True)
     """ Sheet model was soft deleted """
