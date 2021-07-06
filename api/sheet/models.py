@@ -23,6 +23,8 @@ class Sheet(models.Model):
     """ Sheet ranking vs other Sheets 1 - 999 """
     meta = models.CharField(max_length=255, blank=True, null=True)
     """ Meta information for the User """
+    is_base = models.BooleanField(blank=False, null=False, default=False)
+    """ Projects Base sheet """
 
     @property
     def time_sync_data(self):

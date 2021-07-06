@@ -3,9 +3,10 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from libs import mixins, pagination
 from project.models import Project
+from project import services
 
 
-class ProjectList(generics.ListCreateAPIView):
+class ProjectList(generics.ListCreateAPIView, services.ProjectService):
     # queryset = Project.objects.all() - overridden with custom func
     permission_classes = (
         permissions.IsAuthenticated,
@@ -20,11 +21,10 @@ class ProjectList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         temp_data = request.data
         temp_data['owner'] = request.user.id
-        serializer = ProjectSerializer(data=temp_data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+
+        temp_project = self.create_new_project(temp_data)
+        headers = self.get_success_headers(temp_project.data)
+        return Response(temp_project.data, status=status.HTTP_200_OK, headers=headers)
 
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
