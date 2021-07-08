@@ -17,9 +17,17 @@ const createDateMonth = (item, field) => {
   return [Day, Month]
 }
 
+const ITEM_IS_NULL = {
+  name: 'itemIsNull',
+  filter: function (item, isNull= '--') {
+    if (!item) return isNull
+    return item
+  }
+}
+
 const ITEM_LOGIN = {
   name: 'itemLogin',
-  filter: function (item, day=true, month=true, year=true) {
+  filter: function (item, day=true, month=true, year=true, splitChar='/') {
     if (!item) return ''
     if (!item.login_at) return ''
 
@@ -31,49 +39,67 @@ const ITEM_LOGIN = {
     if (month) { result.push(dateArr[1]) }
     if (year) { result.push(dateArr[2]) }
 
-    return result.join('/')
-  }
-}
-
-const ITEM_UPDATE = {
-  name: 'itemUpdate',
-  filter: function (item, day=true, month=true, year=true) {
-    if (!item) return ''
-    if (!item.updated_at) return ''
-
-    let result = []
-
-    const dateArr = createDate(item, 'updated_at')
-
-    if (day) { result.push(dateArr[0]) }
-    if (month) { result.push(dateArr[1]) }
-    if (year) { result.push(dateArr[2]) }
-
-    return result.join('/')
+    return result.join(splitChar)
   }
 }
 
 const ITEM_DATE = {
   name: 'itemDate',
-  filter: function (item, day=true, month=true, year=true) {
+  filter: function (item, day=true, month=true, year=true, splitChar='/') {
     if (!item) return ''
-    if (!item.created_at) return ''
 
     let result = []
 
-    const dateArr = createDate(item, 'created_at')
+    const dateArr = createDate({ date: item }, 'date')
 
     if (day) { result.push(dateArr[0]) }
     if (month) { result.push(dateArr[1]) }
     if (year) { result.push(dateArr[2]) }
 
-    return result.join('/')
+    return result.join(splitChar)
+  }
+}
+
+const ITEM_CREATED = {
+  name: 'itemCreated',
+  filter: function (item, day=true, month=true, year=true, splitChar='/') {
+    if (!item) return ''
+    if (!item.createdAt) return ''
+
+    let result = []
+
+    const dateArr = createDate(item, 'createdAt')
+
+    if (day) { result.push(dateArr[0]) }
+    if (month) { result.push(dateArr[1]) }
+    if (year) { result.push(dateArr[2]) }
+
+    return result.join(splitChar)
+  }
+}
+
+
+const ITEM_UPDATED = {
+  name: 'itemUpdated',
+  filter: function (item, day=true, month=true, year=true, splitChar='/') {
+    if (!item) return ''
+    if (!item.updatedAt) return ''
+
+    let result = []
+
+    const dateArr = createDate(item, 'updatedAt')
+
+    if (day) { result.push(dateArr[0]) }
+    if (month) { result.push(dateArr[1]) }
+    if (year) { result.push(dateArr[2]) }
+
+    return result.join(splitChar)
   }
 }
 
 const ITEM_DONE = {
   name: 'itemDone',
-  filter: function (item, day=true, month=true, year=true) {
+  filter: function (item, day=true, month=true, year=true, splitChar='/') {
     if (!item) return ''
     if (!item.done_at) return ''
 
@@ -85,7 +111,25 @@ const ITEM_DONE = {
     if (month) { result.push(dateArr[1]) }
     if (year) { result.push(dateArr[2]) }
 
-    return result.join('/')
+    return result.join(splitChar)
+  }
+}
+
+const ITEM_DELETED = {
+  name: 'itemDeleted',
+  filter: function (item, day=true, month=true, year=true, splitChar='/') {
+    if (!item) return ''
+    if (!item.deletedAt) return ''
+
+    let result = []
+
+    const dateArr = createDate(item, 'deletedAt')
+
+    if (day) { result.push(dateArr[0]) }
+    if (month) { result.push(dateArr[1]) }
+    if (year) { result.push(dateArr[2]) }
+
+    return result.join(splitChar)
   }
 }
 
@@ -93,9 +137,9 @@ const ITEM_DATE_ABR = {
   name: 'itemDateAbr',
   filter: function (item) {
     if (!item) return ''
-    if (!item.created_at) return ''
+    if (!item.createdAt) return ''
 
-    const dateArr = createDateMonth(item, 'created_at')
+    const dateArr = createDateMonth(item, 'createdAt')
 
     return `${dateArr[0]} ${dateArr[1]}`
   }
@@ -105,14 +149,19 @@ const ITEM_TIME_ABR = {
   name: 'itemTimeAbr',
   filter: function (item) {
     if (!item) return ''
-    if (!item.created_at) return ''
+    if (!item.createdAt) return ''
 
-    return new Date(item.created_at).getHours() < 12 ? 'am' : 'pm'
+    return new Date(item.createdAt).getHours() < 12 ? 'am' : 'pm'
   }
 }
 
 const ALL_FILTERS = [
   ITEM_DATE,
+  ITEM_CREATED,
+  ITEM_UPDATED,
+  ITEM_DELETED,
+  ITEM_DATE,
+  ITEM_IS_NULL,
   ITEM_DATE_ABR,
   ITEM_TIME_ABR
 ]

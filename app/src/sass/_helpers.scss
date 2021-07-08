@@ -77,6 +77,9 @@
     fill: nth($value, 1);
   }
 }
+.has-border-background { border: $unit / 10 solid $background; }
+.has-fill-background { fill: $background; }
+
 
 .is-clickable {
   @extend .is-clickable;

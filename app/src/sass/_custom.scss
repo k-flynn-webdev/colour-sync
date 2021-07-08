@@ -8,6 +8,18 @@ html {
   color: $color-text;
   min-height: 40rem;
 
+  .has-border-radius {
+    border-radius: 0.33rem;
+  }
+
+  .control.is-loading::after {
+    border: 2px solid $background;
+    border-right-color: transparent;
+    border-top-color: transparent;
+  }
+
+  .overflow-auto { overflow: auto; }
+
   .email { font-size: 0.9rem; }
 
   .close {
@@ -82,5 +94,13 @@ html {
         flex-grow: 1;
       }
     }
+  }
+
+  .span-comma {
+    span {
+      &:not(:empty)::after { content: ", "; }
+      &:last-of-type::after { content: ""; }
+    }
+    .id:not(:empty)::after { content: " "; }
   }
 }

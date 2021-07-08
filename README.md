@@ -63,10 +63,11 @@ url
 
 time
     - sheet (see `sheet.time` from above)
-    - time (date + time)
-    - time (duration (hours/days/weeks/months))
+    - date (date + time) 
+    - durationType (enum)
+    - durationVal (int) (in # (active/days/weeks/months))
     - repeatType (enum)
-    - repeatVal (int) (in # days)
+    - repeatVal (int) (in # (days/weeks/months))
     (repeatType should be based on the year kinda, eg:
         * repeat `NONE` - default,
         * repeat `DAY` of the month (x of 31),
@@ -76,3 +77,10 @@ time
     With the user only being able to choose between each type not a combo!
         * all repeat times will be started from the day eg after midnight 00:01 am) 
 
+TODO:
+    - discount codes?
+    - alpha/beta etc property
+    - auto copy+paste for lazy people on the style sheet creation page
+    - test page/view button ...?
+    - better strap line than `cron jobs for styles`
+    - 

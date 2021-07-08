@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import csrf from './csrf.js'
 import user from './user.js'
 import project from './project.js'
+import sheet from './sheet.js'
+import time from './time.js'
 
 Vue.use(Vuex)
 
@@ -16,6 +18,8 @@ export default new Vuex.Store({
   modules: {
     csrf,
     user,
-    project
+    project,
+    sheet,
+    time
   }
 })

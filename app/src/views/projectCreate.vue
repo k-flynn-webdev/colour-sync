@@ -1,7 +1,8 @@
 <template>
   <div class="column is-7-tablet is-6-desktop is-4-widescreen project">
     <form class="box"
-          @submit.prevent="submit">
+          @reset="onReset"
+          @submit.prevent="onSubmit">
       <div class="field">
         <label for="id-name" class="label">
           Name
@@ -33,8 +34,11 @@
       </div>
 
       <div class="field mt-5">
-        <button class="button is-success">
-          {{ loading ? '...' : 'Create' }}
+        <button
+            class="button is-success"
+            :disabled="!isValid"
+        >
+          {{ isLoading ? '...' : 'Create' }}
         </button>
       </div>
 
@@ -48,7 +52,7 @@ import { PROJECT } from '@/constants'
 import { genericErrMixin } from '@/plugins/genericErrPlugin'
 
 export default {
-  name: 'project',
+  name: 'project-create',
 
   mixins: [
     genericErrMixin
@@ -56,37 +60,42 @@ export default {
 
   data () {
     return {
-      loading: false,
-      form: {
-        name: '',
-        meta: '',
-      }
+      isLoading: false,
+      form: PROJECT.init()
+    }
+  },
+
+  computed: {
+    isValid() {
+      return PROJECT.isValid(this.form)
     }
   },
 
   methods: {
     /** Reset form */
-    resetForm () {
+    onReset () {
       this.form = this.$options.data.call(this).form
     },
     /**
      * Submit Project details to API
      *
-     * @returns {void|Promise<boolean>}
+     * @returns {Promise|void}
      */
-    submit () {
-      if (this.loading) return
-      if (!PROJECT.isValid(this.form)) return
+    onSubmit () {
+      if (this.isLoading) return
+      if (!this.isValid) return
 
-      this.loading = true
+      this.isLoading = true
 
-      return this.$store.dispatch('csrf/get')
-      .then(() => this.$store.dispatch('project/post', this.form))
-      .then(({ data }) => {
-        this.$router.push({ name: PROJECT.route.name, params: { id: data.id } })
-      })
-      .catch(err => this.handleError(err))
-      .finally(() => this.loading = false)
+      const promise = this.$store.dispatch(`${PROJECT.store}/post`, this.form)
+          .then(() => this.$message.add({ message: 'Project created.' }))
+          .then(() => this.$router.push({ name: PROJECT.views.list }))
+          .catch(err => this.handleError(err))
+
+      promise
+          .finally(() => this.isLoading = false)
+
+      return promise
     }
   }
 }

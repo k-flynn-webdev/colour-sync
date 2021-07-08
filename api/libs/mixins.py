@@ -11,31 +11,39 @@ class CustomRenderer(JSONRenderer):
         pagination: {}
     ]
     """
-    def render(self, data, accepted_media_type=None, renderer_context=None, detail=None):
+    def render(self, data, accepted_media_type=None, renderer_context=None):
         status_code = renderer_context['response'].status_code
 
-        temp_data = data
-        temp_page = None
+        temp_data = None
+        temp_detail = None
+        temp_pagination = None
+        is_success = str(status_code).startswith('2') or str(status_code).startswith('3')
+
         # split data into pagination parts
-        if data.get('data'):
-            temp_data = data.get('data')
-            temp_page = {
-                'count': data.get('count'),
-                'next': data.get('next'),
-                'previous': data.get('previous')
+        try:
+            temp_pagination = {
+                'count': data['count'],
+                'next': data['next'],
+                'previous': data['previous']
             }
+            temp_data = data['data']
+        except:
+            temp_pagination = None
+            temp_data = data
 
-        detail_found = detail
-        if hasattr(self, 'detail'):
-            detail_found = self.detail
+        if is_success:
+            try:
+                temp_detail = data.get('detail')
+            except:
+                temp_data = data
 
-        response = create_response(temp_data, status_code, detail_found)
 
-        if temp_page:
-            response.update(temp_page)
-            print(temp_page)
+        data_to_render = create_response(temp_data, status_code, temp_detail)
 
-        return super(CustomRenderer, self).render(response, accepted_media_type, renderer_context)
+        if temp_pagination:
+            data_to_render.update(temp_pagination)
+
+        return super(CustomRenderer, self).render(data_to_render, accepted_media_type, renderer_context)
 
 
 def create_response(data, status_code, detail):
@@ -68,5 +76,5 @@ def create_response(data, status_code, detail):
     return response
 
 
-def custom_renderer_basic(data, status_code, detail):
-    return JsonResponse(create_response(data, status_code, detail))
+def custom_renderer_basic(data_to_render, status_code, detail):
+    return JsonResponse(create_response(data_to_render, status_code, detail))
