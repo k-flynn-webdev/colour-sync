@@ -1,7 +1,7 @@
 # :colour-sync: TODO List
 
 ### FE
-- [ ] Auto create a sheet after creating a project ()
+- [x] Auto create a sheet after creating a project ()
     - [ ] Basic non-deletable sheet ()
   
 ### BE
