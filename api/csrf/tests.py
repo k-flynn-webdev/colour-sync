@@ -14,4 +14,5 @@ class BasicTests(TestCase):
         response = get_csrf(request)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(json.loads(response.content)['detail']) > 5)
-        self.assertTrue(len(json.loads(response.content)['token']) > 25)
+        self.assertEquals(json.loads(response.content)['detail'], 'CSRF cookie set')
+        self.assertTrue(len(json.loads(response.content)['data']) > 25)
