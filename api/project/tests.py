@@ -69,3 +69,5 @@ class BasicTests(TestCase):
 
         response_other = self.client.get(f'/api/project/{user_other_project.id}/', format='json')
         self.assertEqual(response_other.status_code, 404)
+
+

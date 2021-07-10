@@ -11,9 +11,8 @@ def create_basic_sheet(owner=-1, project=-1):
         'owner': owner,
         'project': project,
         'ranking': 1,
-        'meta': 'Basic CSS sheet, this will always be the default.',
+        'meta': 'Basic CSS sheet, this is your first css sheet.',
         'data': '###### BASE CSS ######\n## Place your CSS data here ##',
-        'is_base': True
     }
 
 
