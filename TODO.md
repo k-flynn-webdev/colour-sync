@@ -2,7 +2,7 @@
 
 ### FE
 - [x] Auto create a sheet after creating a project ()
-    - [ ] Basic non-deletable sheet ()
+    - [-] ~~Basic non-deletable sheet ()~~
   
 ### BE
 - [ ] Rank sheets and find ranking

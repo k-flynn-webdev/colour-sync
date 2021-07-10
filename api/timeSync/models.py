@@ -1,28 +1,29 @@
-from datetime import datetime
-
 from django.contrib.auth import get_user_model as user_model
-from django.db import models
 from sheet.models import Sheet
+from datetime import datetime
+from django.db import models
 
 User = user_model()
-DURATION_CHOICES = [
-    ('ON', 'Active'),
-    ('DY', 'Day'),
-    ('WK', 'Week'),
-    ('MH', 'Month'),
-    ('YR', 'Year'),
-]
-REPEAT_CHOICES = [
-    ('NO', 'None'),
-    ('DY', 'Day'),
-    ('WK', 'Week'),
-    ('MH', 'Month'),
-    ('YR', 'Year'),
-]
 
 
 class TimeSync(models.Model):
     """ Time model to control when a sheet is active """
+
+    DURATION_CHOICES = [
+        ('ON', 'Active'),
+        ('DY', 'Day'),
+        ('WK', 'Week'),
+        ('MH', 'Month'),
+        ('YR', 'Year'),
+    ]
+    REPEAT_CHOICES = [
+        ('NO', 'None'),
+        ('DY', 'Day'),
+        ('WK', 'Week'),
+        ('MH', 'Month'),
+        ('YR', 'Year'),
+    ]
+
     owner = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     """ Owner this Time model affects """
     sheet = models.ForeignKey(Sheet, on_delete=models.CASCADE)
