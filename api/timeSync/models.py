@@ -13,7 +13,7 @@ class TimeSync(models.Model):
     """ TimeSync current active state """
 
     DURATION_CHOICES = [
-        ('IN', 'Indefinate'),
+        ('IN', 'Indefinite'),
         ('DY', 'Day'),
         ('WK', 'Week'),
         ('MH', 'Month'),
