@@ -37,3 +37,25 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Project.objects.filter(owner=self.request.user)
+
+
+class ProjectCommand(generics.RetrieveUpdateDestroyAPIView, services.ProjectService):
+    # queryset = Project.objects.all() - overridden with custom func
+    permission_classes = (
+        permissions.IsAuthenticated,
+    )
+    serializer_class = ProjectSerializer
+    renderer_classes = [mixins.CustomRenderer]
+
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        temp_data = request.data
+        temp_data['id'] = kwargs['pk']
+        temp_data['owner'] = request.user.id
+        command_data = self.collect_sheets_by_rank(temp_data)
+
+        # temp_project = self.create_new_project(temp_data)
+        # headers = self.get_success_headers(temp_project.data)
+        return Response(command_data, status=status.HTTP_200_OK)
