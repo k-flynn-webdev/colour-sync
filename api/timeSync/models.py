@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model as user_model
 from sheet.models import Sheet
-from datetime import datetime
 from django.db import models
+from django.utils import timezone
 
 User = user_model()
 
@@ -9,8 +9,11 @@ User = user_model()
 class TimeSync(models.Model):
     """ Time model to control when a sheet is active """
 
+    isActive = models.BooleanField(default=True, blank=False, null=False)
+    """ TimeSync current active state """
+
     DURATION_CHOICES = [
-        ('ON', 'Active'),
+        ('IN', 'Indefinite'),
         ('DY', 'Day'),
         ('WK', 'Week'),
         ('MH', 'Month'),
@@ -30,11 +33,11 @@ class TimeSync(models.Model):
     """ Sheet this Time model affects """
     meta = models.CharField(max_length=255, blank=True, null=True)
     """ Meta information for this Time model """
-    date = models.DateField()
+    date = models.DateField(default=timezone.now, blank=False, null=False)
     """ Time this model becomes active """
     durationType = models.CharField(
         max_length=2,
-        default='ON',
+        default=DURATION_CHOICES[0][0],
         choices=DURATION_CHOICES,
     )
     """ Duration type, enum choice """
@@ -43,7 +46,7 @@ class TimeSync(models.Model):
 
     repeatType = models.CharField(
         max_length=2,
-        default='NO',
+        default=REPEAT_CHOICES[0][0],
         choices=REPEAT_CHOICES,
     )
     """ Repeat type, enum choice """

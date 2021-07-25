@@ -9,7 +9,10 @@ User = user_model()
 
 class Sheet(models.Model):
     """ Sheet of different styles a User can assign to a Project """
-    name = models.CharField(max_length=255, blank=False, default='')
+
+    isActive = models.BooleanField(default=True, blank=False, null=False)
+    """ Sheets current active state """
+    name = models.CharField(max_length=255, blank=False, default='Base')
     """ Sheet name """
     url = models.CharField(max_length=255, blank=False, null=False)
     """ Sheet URL """

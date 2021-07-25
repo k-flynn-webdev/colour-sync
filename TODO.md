@@ -5,7 +5,7 @@
     - [-] ~~Basic non-deletable sheet ()~~
   
 ### BE
-- [ ] Rank sheets and find ranking
+- [x] Rank sheets and find ranking command
 - [ ] Render out ranked sheet to static dir
 - [ ] Email if/when a ranked sheet changed (eg your xxx sheet/campaign is now ready/in use)
 

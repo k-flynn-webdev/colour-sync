@@ -1,10 +1,13 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from django.test import TestCase
-import json
 
+from timeSync.models import TimeSync
 from project.models import Project
 from sheet.models import Sheet
+from project import services
+import datetime
+import json
 
 User = get_user_model()
 
@@ -46,7 +49,6 @@ class BasicTests(TestCase):
         self.assertIsNone(response_data['deletedAt'])
         self.assertEqual(Sheet.objects.filter(project=response_data['id']).count(), 1)
 
-
     def test_deny_projects_when_not_logged_in(self):
         self.client.logout()
         response = self.client.get('/api/project/', format='json')
@@ -70,4 +72,111 @@ class BasicTests(TestCase):
         response_other = self.client.get(f'/api/project/{user_other_project.id}/', format='json')
         self.assertEqual(response_other.status_code, 404)
 
+    def test_project_service_sheets_based_on_3_dates(self):
+        """ Test timing of sheets returns correctly
+        (x1) of x3 sheets (past, today. future) """
 
+        projectServiceIns = services.ProjectService()
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
+
+        past_date = datetime.date.today() - datetime.timedelta(days=6)
+        future_date = datetime.date.today() + datetime.timedelta(days=6)
+
+        user_project = Project.objects.create(**project_data)
+
+        user_sheet_past = Sheet.objects.create(project=user_project, owner=self.user, meta='past')
+        user_sheet_today = Sheet.objects.create(project=user_project, owner=self.user, meta='today')
+        user_sheet_future = Sheet.objects.create(project=user_project, owner=self.user, meta='future')
+
+        TimeSync.objects.create(sheet=user_sheet_past, owner=self.user, durationVal=1, durationType='DY', date=past_date, meta=user_sheet_past.meta)
+        TimeSync.objects.create(sheet=user_sheet_today, owner=self.user, durationVal=1, durationType='DY', meta=user_sheet_today.meta)
+        TimeSync.objects.create(sheet=user_sheet_future, owner=self.user, durationVal=1, durationType='DY', date=future_date, meta=user_sheet_future.meta)
+
+        result = projectServiceIns.collect_sheets_by_rank(user_project)
+
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].id, user_sheet_today.id)
+        self.assertEqual(result[0].meta, user_sheet_today.meta)
+        self.assertEqual(result[0].project, user_sheet_today.project)
+
+    def test_project_service_sheets_returns_correct(self):
+        """ Test timing of sheets returns correctly (x2) of x3 sheets
+        (past, today. future) based on the overlap of time and ranking"""
+
+        projectServiceIns = services.ProjectService()
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
+
+        past_date = datetime.date.today() - datetime.timedelta(days=6)
+        future_date = datetime.date.today() + datetime.timedelta(days=6)
+
+        user_project = Project.objects.create(**project_data)
+
+        user_sheet_past = Sheet.objects.create(project=user_project, owner=self.user, meta='past', ranking=1)
+        user_sheet_today = Sheet.objects.create(project=user_project, owner=self.user, meta='today', ranking=10)
+        user_sheet_future = Sheet.objects.create(project=user_project, owner=self.user, meta='future', ranking=100)
+
+        TimeSync.objects.create(sheet=user_sheet_past, owner=self.user, durationVal=10, durationType='DY', date=past_date, meta=user_sheet_past.meta)
+        TimeSync.objects.create(sheet=user_sheet_today, owner=self.user, durationVal=10, durationType='DY', meta=user_sheet_today.meta)
+        TimeSync.objects.create(sheet=user_sheet_future, owner=self.user, durationVal=10, durationType='DY', date=future_date, meta=user_sheet_future.meta)
+
+        result = projectServiceIns.collect_sheets_by_rank(user_project)
+
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0].id, user_sheet_past.id)
+        self.assertEqual(result[0].meta, user_sheet_past.meta)
+        self.assertEqual(result[0].project, user_sheet_past.project)
+        self.assertEqual(result[1].id, user_sheet_today.id)
+        self.assertEqual(result[1].meta, user_sheet_today.meta)
+        self.assertEqual(result[1].project, user_sheet_today.project)
+
+    def test_project_service_sheets_returns_correct_ranking(self):
+        """ Test timing of sheets returns correctly (x2) of x3 sheets
+        (past, today. future) based on the overlap of time and ranking"""
+
+        projectServiceIns = services.ProjectService()
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
+
+        past_date = datetime.date.today() - datetime.timedelta(days=6)
+        future_date = datetime.date.today() + datetime.timedelta(days=6)
+
+        user_project = Project.objects.create(**project_data)
+
+        user_sheet_past = Sheet.objects.create(project=user_project, owner=self.user, meta='past', ranking=999)
+        user_sheet_today = Sheet.objects.create(project=user_project, owner=self.user, meta='today', ranking=10)
+        user_sheet_future = Sheet.objects.create(project=user_project, owner=self.user, meta='future', ranking=100)
+
+        TimeSync.objects.create(sheet=user_sheet_past, owner=self.user, durationVal=10, durationType='DY', date=past_date, meta=user_sheet_past.meta)
+        TimeSync.objects.create(sheet=user_sheet_today, owner=self.user, durationVal=10, durationType='DY', meta=user_sheet_today.meta)
+        TimeSync.objects.create(sheet=user_sheet_future, owner=self.user, durationVal=10, durationType='DY', date=future_date, meta=user_sheet_future.meta)
+
+        result = projectServiceIns.collect_sheets_by_rank(user_project)
+
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[1].id, user_sheet_past.id)
+        self.assertEqual(result[1].meta, user_sheet_past.meta)
+        self.assertEqual(result[1].project, user_sheet_past.project)
+        self.assertEqual(result[0].id, user_sheet_today.id)
+        self.assertEqual(result[0].meta, user_sheet_today.meta)
+        self.assertEqual(result[0].project, user_sheet_today.project)
+
+    def test_project_service_sheets_returns_equal_ranking_by_date(self):
+        """ Test timing of sheets returns correctly order of sheets
+            that have the same ranking but different creation dates """
+
+        projectServiceIns = services.ProjectService()
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
+
+        past_date = datetime.datetime.now() - datetime.timedelta(days=6)
+
+        user_project = Project.objects.create(**project_data)
+
+        user_sheet_01 = Sheet.objects.create(project=user_project, owner=self.user, meta='01', ranking=900, createdAt=past_date)
+        user_sheet_02 = Sheet.objects.create(project=user_project, owner=self.user, meta='02', ranking=900)
+
+        result = projectServiceIns.collect_sheets_by_rank(user_project)
+
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0].id, user_sheet_01.id)
+        self.assertEqual(result[1].id, user_sheet_02.id)
+
+    # // todo: Test for active/inactive projects
