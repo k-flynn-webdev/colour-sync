@@ -1,10 +1,12 @@
 from project.serializers import ProjectSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from django.http import HttpResponse
 from libs import mixins, pagination
 from project.models import Project
+from django.http import Http404
+from sheet.models import Sheet
 from project import services
-
 
 class ProjectList(generics.ListCreateAPIView, services.ProjectService):
     # queryset = Project.objects.all() - overridden with custom func
@@ -39,23 +41,30 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
         return Project.objects.filter(owner=self.request.user)
 
 
-class ProjectCommand(generics.RetrieveUpdateDestroyAPIView, services.ProjectService):
+class ProjectStyle(generics.RetrieveAPIView, services.ProjectService):
     # queryset = Project.objects.all() - overridden with custom func
     permission_classes = (
-        permissions.IsAuthenticated,
+        permissions.AllowAny,
     )
     serializer_class = ProjectSerializer
     renderer_classes = [mixins.CustomRenderer]
-
-    def get_queryset(self):
-        return Project.objects.filter(owner=self.request.user)
+    lookup_field = 'url'
 
     def get(self, request, *args, **kwargs):
-        temp_data = request.data
-        temp_data['id'] = kwargs['pk']
-        temp_data['owner'] = request.user.id
-        command_data = self.collect_sheets_by_rank(temp_data)
+        sheets_data = None
+        style_url = self.kwargs.get('url', None)
+        project_found = Project.objects.filter(url=style_url)
 
-        # temp_project = self.create_new_project(temp_data)
-        # headers = self.get_success_headers(temp_project.data)
-        return Response(command_data, status=status.HTTP_200_OK)
+        if project_found.first() is not None:
+            sheets_data = self.collect_sheets_by_rank(project_found.first())
+        elif style_url == 'base':
+            # // base is a protected term
+            raise Http404
+        else:
+            sheets_data = Sheet.objects.filter(url=style_url)
+
+        if sheets_data is None or len(sheets_data) < 1:
+            raise Http404
+
+        return HttpResponse(content=sheets_data[0].data, content_type='text/css')
+

@@ -12,7 +12,7 @@ def create_basic_sheet(owner=-1, project=-1):
     """ Return data of a basic `Sheet` """
     return {
         'name': 'Base',
-        'url': 'Base',
+        'url': 'base',
         'owner': owner,
         'project': project,
         'ranking': 1,

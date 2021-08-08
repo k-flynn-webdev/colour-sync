@@ -180,3 +180,38 @@ class BasicTests(TestCase):
         self.assertEqual(result[1].id, user_sheet_02.id)
 
     # // todo: Test for active/inactive projects
+
+    def test_get_project_style_by_url(self):
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'url': 'fancy-url'}
+        response = self.client.post('/api/project/', project_data, format='json')
+
+        self.assertEqual(response.status_code, 200)
+
+        response2 = self.client.get('/api/project/style/fancy-url.css')
+        self.assertEqual(response2.status_code, 200)
+
+        # test wrong url
+        response2 = self.client.get('/api/project/style/fancy-url-missing.css')
+        self.assertEqual(response2.status_code, 404)
+
+    def test_get_project_style_should_refuse_base_url(self):
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'url': 'fancy-url'}
+        response = self.client.post('/api/project/', project_data, format='json')
+
+        self.assertEqual(response.status_code, 200)
+
+        response2 = self.client.get('/api/project/style/base.css')
+        self.assertEqual(response2.status_code, 404)
+
+    def test_get_project_style_by_sheet_url(self):
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'url': 'fancy-no-url'}
+        response_project = self.client.post('/api/project/', project_data, format='json')
+        self.assertEqual(response_project.status_code, 200)
+
+        response_data = json.loads(response_project.content)['data']
+        sheet_data = {'name': 'testProject', 'owner': response_data['owner'], 'project': response_data['id'], 'url': 'fancy-sheet-url'}
+        response_sheet = self.client.post('/api/sheet/', sheet_data, format='json')
+        self.assertEqual(response_sheet.status_code, 200)
+
+        response2 = self.client.get('/api/project/style/fancy-sheet-url.css')
+        self.assertEqual(response2.status_code, 200)
