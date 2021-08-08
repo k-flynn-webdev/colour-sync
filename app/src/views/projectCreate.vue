@@ -18,6 +18,21 @@
           >
         </div>
       </div>
+        <div class="field">
+        <label for="id-url" class="label">
+          URL
+        </label>
+        <div class="control">
+          <input id="id-url"
+                 v-model="form.url"
+                 class="input"
+                 type="text"
+                 minlength="4"
+                 placeholder="e.g. fancy-url"
+                 required
+          >
+        </div>
+      </div>
       <div class="field">
         <label for="id-meta"
                class="label">

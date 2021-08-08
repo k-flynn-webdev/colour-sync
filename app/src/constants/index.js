@@ -104,6 +104,7 @@ export const ADMIN = {
 function checkProject (input) {
   if (!input) return false
   const isNameValid = (input.name && input.name.length >= 5)
+  const isURLValid = (input.url ? input.url.length >= 4 : true)
   const isMetaValid = (input.meta ? input.meta.length >= 5 : true)
   return (isNameValid && isMetaValid)
 }
@@ -133,9 +134,10 @@ export const PROJECT = {
  *
  * @property {number}   [id]
  * @property {string}   name
- * @property {number}   [owner]
+ * @property {string}   url
  * @property {string}   meta
  * @property {number}   [sheets]
+ * @property {number}   [owner]
  * @property {date}     createdAt
  * @property {date}     updatedAt
  * @property {date}     deletedAt
@@ -150,6 +152,7 @@ function createProjectObj () {
   return {
     id: -1,
     name: '',
+    url: '',
     meta: '',
     owner: undefined,
     sheets: -1,
