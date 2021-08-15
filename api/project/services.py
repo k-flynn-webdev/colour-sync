@@ -1,11 +1,14 @@
+import os
+
 from rest_framework import permissions, pagination
 from django.core.exceptions import ValidationError
 from project.serializers import ProjectSerializer
 from sheet.serializers import SheetSerializer
 from timeSync.models import TimeSync
+from django.core.files import File
+from django.conf import settings
 from sheet.models import Sheet
 import datetime
-
 
 
 def create_basic_sheet(owner=-1, project=-1):
@@ -107,9 +110,23 @@ def collect_sheets_by_rank(project):
                 sheets_set.append(sheet)
                 break
 
-    sheets_set.sort(key=lambda x: (x.ranking, x.createdAt))
+    # // TODO fix up tests to reflect this change
+    sheets_set.sort(key=lambda x: (-x.ranking, x.createdAt))
 
     return sheets_set
+
+
+def create_file(file_name, file_data):
+    """ Create a file in `FILES CSS` dir """
+    file_name = f'{file_name}.css'
+    path_dir = getattr(settings, "STATIC_ROOT", None)
+    path_static_css_files = getattr(settings, "STATIC_CSS_FILES", None)
+    path_combined = os.path.join(path_dir, path_static_css_files, file_name)
+
+    file_opened = open(path_combined + '', "w")
+    file_opened.write(file_data)
+    file_opened.close()
+    return True
 
 
 class ProjectService:
@@ -118,4 +135,3 @@ class ProjectService:
     )
     serializer_class = ProjectSerializer
     pagination_class = pagination.LimitOffsetPagination
-
