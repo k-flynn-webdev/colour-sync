@@ -32,7 +32,7 @@ class BasicTests(TestCase):
         self.login()
 
     def test_sheet_create(self):
-        project_data = {'name': 'testProject', 'meta': 'meta items here'}
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'url': 'test'}
         response_project = self.client.post('/api/project/', project_data, format='json')
         response_project_data = json.loads(response_project.content)['data']
         sheet_data = {

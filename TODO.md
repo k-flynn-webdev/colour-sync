@@ -8,7 +8,7 @@
 - [x] Rank sheets and find ranking command
 - [x] URL routing for direct access
 - [ ] URL routing for static access
-- [ ] Render out ranked sheet to static dir
+- [-] Render out ranked sheet to static dir
 - [ ] Email if/when a ranked sheet changed (eg your xxx sheet/campaign is now ready/in use)
 
 ### BE ASYNC
@@ -17,3 +17,4 @@
 
 ### MISC
 - [ ] Coupons/Discounts eg first 100 customers
+- [ ] All `URL`, `NAME`, `.data` properties need to be made execution safe ALWAYS

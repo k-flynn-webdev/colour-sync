@@ -35,7 +35,7 @@ class BasicTests(TestCase):
         self.login()
 
     def test_project_create_and_base_sheet(self):
-        project_data = {'name': 'testProject', 'meta': 'meta items here'}
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'url': 'test'}
         response = self.client.post('/api/project/', project_data, format='json')
         response_data = json.loads(response.content)['data']
         self.assertEqual(response.status_code, 200)
@@ -57,8 +57,8 @@ class BasicTests(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_can_only_see_own_projects(self):
-        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
-        project_data_other = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user_other}
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user, 'url': 'test'}
+        project_data_other = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user_other, 'url': 'test'}
 
         user_project = Project.objects.create(**project_data)
         user_other_project = Project.objects.create(**project_data_other)
@@ -76,8 +76,8 @@ class BasicTests(TestCase):
         """ Test timing of sheets returns correctly
         (x1) of x3 sheets (past, today. future) """
 
-        projectServiceIns = services.ProjectService()
-        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
+        projectServiceIns = services
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user, 'url': 'test'}
 
         past_date = datetime.date.today() - datetime.timedelta(days=6)
         future_date = datetime.date.today() + datetime.timedelta(days=6)
@@ -103,8 +103,8 @@ class BasicTests(TestCase):
         """ Test timing of sheets returns correctly (x2) of x3 sheets
         (past, today. future) based on the overlap of time and ranking"""
 
-        projectServiceIns = services.ProjectService()
-        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
+        projectServiceIns = services
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user, 'url': 'test'}
 
         past_date = datetime.date.today() - datetime.timedelta(days=6)
         future_date = datetime.date.today() + datetime.timedelta(days=6)
@@ -133,8 +133,8 @@ class BasicTests(TestCase):
         """ Test timing of sheets returns correctly (x2) of x3 sheets
         (past, today. future) based on the overlap of time and ranking"""
 
-        projectServiceIns = services.ProjectService()
-        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
+        projectServiceIns = services
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user, 'url': 'test'}
 
         past_date = datetime.date.today() - datetime.timedelta(days=6)
         future_date = datetime.date.today() + datetime.timedelta(days=6)
@@ -163,8 +163,8 @@ class BasicTests(TestCase):
         """ Test timing of sheets returns correctly order of sheets
             that have the same ranking but different creation dates """
 
-        projectServiceIns = services.ProjectService()
-        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user}
+        project_service_ins = services
+        project_data = {'name': 'testProject', 'meta': 'meta items here', 'owner': self.user, 'url': 'test'}
 
         past_date = datetime.datetime.now() - datetime.timedelta(days=6)
 
@@ -173,7 +173,7 @@ class BasicTests(TestCase):
         user_sheet_01 = Sheet.objects.create(project=user_project, owner=self.user, meta='01', ranking=900, createdAt=past_date)
         user_sheet_02 = Sheet.objects.create(project=user_project, owner=self.user, meta='02', ranking=900)
 
-        result = projectServiceIns.collect_sheets_by_rank(user_project)
+        result = project_service_ins.collect_sheets_by_rank(user_project)
 
         self.assertEqual(len(result), 2)
         self.assertEqual(result[0].id, user_sheet_01.id)
