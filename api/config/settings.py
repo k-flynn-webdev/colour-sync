@@ -230,6 +230,7 @@ TIME_ZONE = 'Europe/Paris'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(PARENT_DIR, 'static')
+STATIC_CSS_FILES = os.path.join(PARENT_DIR, 'static', os.getenv("APP_NAME_SHORT"))
 
 # Vue project location
 APP_DIR = os.path.join(PARENT_DIR, 'app')
